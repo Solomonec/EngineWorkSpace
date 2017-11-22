@@ -1,0 +1,63 @@
+﻿@using MvcPaging
+@model IPagedList<MetroSupport.Models.UserProfile>
+@{
+    ViewBag.Title = "ИТ";
+    Layout = "~/Areas/Administration/Views/Users/_UsersLayout.cshtml";
+    const string alfabetic = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+<div class="adm-user-verb-panel">
+    @foreach (char t in alfabetic)
+    {
+        @Html.ActionLink(t.ToString(), "It", "Users", new { literal = t }, new { @class = "adm-user-verb adm-color-it" })
+    }
+</div>
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+        <tr class="adm-user-table-header adm-color-it">
+            <td>Имя пользователя</td>
+            <td>Логин</td>
+            <td>Должность</td>
+            <td>E-mail</td>
+            <td width="40px"></td>
+            <td width="40px"></td>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
+        {
+            foreach (var profile in Model)
+            {
+                <tr>
+                    <td>@profile.FullName</td>
+                    <td>@profile.UserName</td>
+                    <td>@profile.Job</td>
+                    <td>@profile.Email</td>
+                    <td>@Html.Raw(Html.ActionLink("Подробнее", "Manage", new { username = @profile.UserName }).ToHtmlString().Replace("Подробнее", "<span class=\"editico\"></span>"))</td>
+                    <td>@Html.Raw(Html.ActionLink("Удалить", "DeleteUser", new { username = @profile.UserName }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height: 45px">
+        @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").AddRouteValue("literal", ViewBag.Literal).MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+

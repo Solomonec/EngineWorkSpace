@@ -1,0 +1,58 @@
+﻿@using MvcPaging
+@model MetroSupport.Areas.Administration.ViewModels.AssignerViewModel
+@{
+    ViewBag.Title = "PA";
+    Layout = "~/Areas/Administration/Views/Assigners/_AssignersLayout.cshtml";
+   
+}
+
+
+<button id="addassigner" class="adm-user-newperson-button adm-color-pa">Добавить исполнителя</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-pa">
+                <td>Имя исполнителя</td>
+                <td>Ответственный</td>
+              
+                <td width="40px"></td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var assigner in Model.Assigners)
+                {
+                    <tr>
+                        <td>@assigner.AssignerName</td>
+                        <td>@assigner.BossName</td>
+                       
+                        <td><span class="editico" data-assignerid="@assigner.AssignerId"></span></td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveAssigner", new { assignerid = @assigner.AssignerId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+                  </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height:45px">
+        @Html.Pager(Model.Assigners.PageSize, Model.Assigners.PageNumber, Model.Assigners.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+
+@Html.Partial("Modals/AssignerModalPartial", Model.Assigner); 

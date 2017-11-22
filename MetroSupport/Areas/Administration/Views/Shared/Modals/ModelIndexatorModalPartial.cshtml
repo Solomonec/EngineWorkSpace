@@ -1,0 +1,33 @@
+﻿@model MetroSupport.Models.ModelIndexator
+<div id="modalindexator" style="display:none">
+    @using (Html.BeginForm("CreateModelIndexator", "Indexators", FormMethod.Post, new {id = "indexatorform"}))
+    {
+        <div class="indexator-modal-background">
+            <div class="indexator-modal-header">
+                <div class="header-text">Индексатор</div>
+            </div>
+            <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+            </div>
+            @Html.HiddenFor(x => x.IndexatorId, new{id="indexatorid"})
+            <div class="indexator-modal-inputblock">
+                <div class="indexator-modal-label">Ключ индексатора</div> @Html.TextBoxFor(model => model.ModelIndexatorName, new {@class = "indexator-modal-input", id = "indexator"}) @Html.ValidationMessageFor(x => x.ModelIndexatorName)
+            </div>
+          
+            <div class="indexator-modal-inputblock">
+                <div class="indexator-modal-label">Отдел</div><div class="indexator-select">@Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "Model", Text = "Модель"},
+                                                                                              
+                                                                                            }, "Выберите тип...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department)
+                                                                                        </div> 
+            </div>
+            <div style="clear: both"></div>
+            <div class="indexator-modal-control">
+                <button type="submit" class="indexator-modal-button button-save">Сохранить</button>
+                <button type="submit" class="indexator-modal-button button-cancel">Отменить</button>
+            </div>
+
+        </div>
+    }
+</div>

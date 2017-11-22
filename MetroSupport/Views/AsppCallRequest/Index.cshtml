@@ -1,0 +1,621 @@
+﻿@model MetroSupport.ViewModels.AsppRequest_LogViewModel
+@using MetroSupport.Commons
+@{
+    Layout = null;
+
+}
+
+<!doctype html>
+<html ng-app="AsppRequestApp">
+<head>
+    <meta charset="utf-8">
+    <title>@Model.AsppRequest.RequestNumber - @Model.AsppRequest.TroubleSubject</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/AsppRequest")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquerymodal")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/aspprequest")
+
+
+</head>
+<body>
+    <div class="header-panel" ng-controller="ButtonsControlCtrl">
+        <ul style="margin: 0; padding: 0; list-style-image: none;">
+            @if (Model.AsppRequest.Status == 0)
+            {
+                if (User.IsInRole("AsppBoss") || User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="saverequest()">Назначить и уведомить</a></li>
+                }
+            }
+            @if (Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4)
+            {
+                if (User.IsInRole("AsppWork") || User.IsInRole("AsppBoss"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo || Model.User.FullName == Model.AsppRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                    }
+                }
+                if (User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                }
+            }
+            @if (Model.AsppRequest.Status == 5 & Model.AsppRequest.IsWorkingOn == 0)
+            {
+                if (User.IsInRole("AsppWork"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-smsize" })</li>
+                    }
+                }
+            }
+            @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("AsppWork"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
+                    }
+                }
+            }
+            @if (Model.AsppRequest.Status == 9)
+            {
+                if (User.IsInRole("AsppBoss"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
+                    }
+                }
+            }
+            @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("AsppWork"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-lgsize" })</li>
+                    }
+                }
+            }
+            @if (Model.AsppRequest.Status == 9)
+            {
+                if (User.IsInRole("AsppBoss"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-smsize" })</li>
+                    }
+                }
+            }
+            @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("AsppBoss") || User.IsInRole("AsppWork"))
+                {
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss || Model.User.FullName == Model.AsppRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="opendenyrequest()">Отклонить</a></li>
+                    }
+                }
+            }
+        </ul>
+        @Html.Partial("_LoginPartial", Model.User)
+    </div>
+    <div class="request-header-box">
+
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">№ заявки: </span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Model.AsppRequest.RequestNumber</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-lgfont request-header-item-lgsize request-header-item-name-color">Проблема: </span> <span class="request-header-item-lgfont request-header-item-lgsize-def request-header-item-content-color">@Theme.ThemePrimaryDefault(Model.AsppRequest.TroubleSubject)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color ">Дата:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color"> @Dates.DateNullConversion(Model.AsppRequest.Creation) @Dates.TimeNullConversion(Model.AsppRequest.Time)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">Статус:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Status.StatusConvertion(Model.AsppRequest.Status, Model.AsppRequest.IsWorkingOn)</span>
+        <div class="request-header-clear">  </div>
+    </div>
+
+    <div class="tab-link-zone">
+        <ul id="tabs">
+            <li><a href="#" name="tab1">Заявка</a></li>
+            <li><a href="#" name="tab2">Работа</a></li>
+            <li><a href="#" name="tab3">История</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        @using (Html.BeginForm("CreateAndSave", "AsppCallRequest", FormMethod.Post, new { id = "asppcallrequestform" }))
+        {
+            @Html.AntiForgeryToken()
+             @Html.HiddenFor(x => x.AsppRequest.CallRequestId)
+            <div id="tab1">
+                <div class="request-subject-box" ng-controller="TroubleSubjectCtrl">
+                    <div class="request-subject-name">Тема заявки:</div> @Html.TextBoxFor(x => x.AsppRequest.TroubleSubject, new { @class = "request-subject-input", ng_model = "theme.themename", @ng_init = "theme.themename ='" + Model.AsppRequest.TroubleSubject + "'", @readonly = "readonly" }) <input type="button" ng-click="openthemedialog()" class="request-subject-button" value="..." />
+                    <div id="modalthemes" style="display:none">
+                        <div class="aspp-themes-background">
+                            <div class="aspp-themes-header"><div class="aspp-themes-header-text">Выбирите тему</div></div>
+                            <div class="aspp-themes-container">
+                                <div class="aspp-themes-box">
+                                 
+                                </div>
+                            </div>
+                            <div style="clear:both"> </div>
+                            <div class="aspp-themes-control">
+                                <button type="button" class="aspp-themes-button button-ok" ng-click="themeacception()">Принять</button>
+                                <button type="button" class="aspp-themes-button button-cancel">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-comment-box">
+                    <div class="request-comment-name">Комментарий:</div> @Html.TextAreaFor(x => x.AsppRequest.Comment, new { @class = "request-comment-input" })
+                </div>
+
+                <div class="request-infobox-lg" ng-controller="DeviceInfoCtrl">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Оборудование заявителя</div>
+                    </div>
+                    <div class="request-infobox-lg-context">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Инв. №</div> @Html.TextBoxFor(x => x.AsppRequest.InvNumber, new { @class = "request-infobox-context-inv", ng_model = "device.invnumber", @ng_init = "device.invnumber ='" + Model.AsppRequest.InvNumber + "'" }) <input type="button" id="adddevice" ng-click="opendialog()" class="request-infobox-context-button" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Устройство</div> @Html.TextBoxFor(x => x.AsppRequest.DeviceName, new { @class = "request-infobox-context-input", ng_model = "device.devicename", @ng_init = "device.devicename ='" + Model.AsppRequest.DeviceName + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Серийный номер</div> @Html.TextBoxFor(x => x.AsppRequest.SerialNumber, new { @class = "request-infobox-context-input", ng_model = "device.serialnumber", @ng_init = "device.serialnumber ='" + Model.AsppRequest.SerialNumber + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Класс</div> @Html.TextBoxFor(x => x.AsppRequest.DeviceClass, new { @class = "request-infobox-context-input", ng_model = "device.deviceclass", @ng_init = "device.deviceclass ='" + Model.AsppRequest.DeviceClass + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Тип</div> @Html.TextBoxFor(x => x.AsppRequest.DeviceType, new { @class = "request-infobox-context-input", ng_model = "device.devicetype", @ng_init = "device.devicetype ='" + Model.AsppRequest.DeviceType + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Модель</div> @Html.TextBoxFor(x => x.AsppRequest.DeviceModel, new { @class = "request-infobox-context-input", ng_model = "device.devicemodel", @ng_init = "device.devicemodel ='" + Model.AsppRequest.DeviceModel + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Ввод в эксп.</div> @Html.TextBoxFor(x => x.AsppRequest.DateInWork, "dd.mm.yyyy", new { @class = "request-infobox-context-input", ng_model = "device.dateinwork", @ng_init = "device.dateinwork ='" + Model.AsppRequest.DateInWork + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                        </div>
+                        <div class="request-infobox-context-container">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="request-infobox-lg">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Описание проблемы</div>
+                    </div>
+                    <div class="request-infobox-lg-context" ng-controller="CategoriesCtrl">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Направление</div> @Html.TextBoxFor(x => x.AsppRequest.TroubleDepartment, new { @class = "request-infobox-context-inv", ng_model = "category.troubledepartment", @readonly = "readonly" }) 
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Категория</div> @Html.TextBoxFor(x => x.AsppRequest.Category, new { @class = "request-infobox-context-input", ng_model = "category.categoryname", @ng_init = "category.categoryname ='" + Model.AsppRequest.Category + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId, new { ng_model = "category.nextsubcategory0", @ng_init = "category.nextsubcategory0 ='" + Model.AsppRequest.NextSubCategoryId + "'", id = "nextsubcategory0", style = "display: none" }) <input type="button" class="request-infobox-context-button" data-number="0" ng-click="opencategoriesdialog($event)" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория1</div> @Html.TextBoxFor(x => x.AsppRequest.SubCategory1, new { @class = "request-infobox-context-input", ng_model = "category.subcategory1", @ng_init = "category.subcategory1 ='" + Model.AsppRequest.SubCategory1 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId1, new { ng_model = "category.nextsubcategory1", @ng_init = "category.nextsubcategory1 ='" + Model.AsppRequest.NextSubCategoryId1 + "'", id = "nextsubcategory1", style = "display: none" })<div ng-show="category.btncategory1"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="1" value="..." /></div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория2</div> @Html.TextBoxFor(x => x.AsppRequest.SubCategory2, new { @class = "request-infobox-context-input", ng_model = "category.subcategory2", @ng_init = "category.subcategory2 ='" + Model.AsppRequest.SubCategory2 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId2, new { ng_model = "category.nextsubcategory2", @ng_init = "category.nextsubcategory2 ='" + Model.AsppRequest.NextSubCategoryId2 + "'", id = "nextsubcategory2", style = "display: none" }) <div ng-show="category.btncategory2"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="2" value="..." /></div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория3</div> @Html.TextBoxFor(x => x.AsppRequest.SubCategory3, new { @class = "request-infobox-context-input", ng_model = "category.subcategory3", @ng_init = "category.subcategory3 ='" + Model.AsppRequest.SubCategory3 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId3, new { ng_model = "category.nextsubcategory3", @ng_init = "category.nextsubcategory3 ='" + Model.AsppRequest.NextSubCategoryId3 + "'", id = "nextsubcategory3", style = "display: none" }) <div ng-show="category.btncategory3"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="3" value="..." /></div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория4</div> @Html.TextBoxFor(x => x.AsppRequest.SubCategory4, new { @class = "request-infobox-context-input", ng_model = "category.subcategory4", @ng_init = "category.subcategory4 ='" + Model.AsppRequest.SubCategory4 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId4, new { ng_model = "category.nextsubcategory4", @ng_init = "category.nextsubcategory4 ='" + Model.AsppRequest.NextSubCategoryId4 + "'", id = "nextsubcategory4", style = "display: none" })<div ng-show="category.btncategory4"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="4" value="..." /></div>
+                        </div>
+
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория5</div> @Html.TextBoxFor(x => x.AsppRequest.SubCategory5, new { @class = "request-infobox-context-input", ng_model = "category.subcategory5", @ng_init = "category.subcategory5 ='" + Model.AsppRequest.SubCategory5 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.AsppRequest.NextSubCategoryId5, new { ng_model = "category.nextsubcategory5", @ng_init = "category.nextsubcategory5 ='" + Model.AsppRequest.NextSubCategoryId5 + "'", id = "nextsubcategory5", style = "display: none" }) <div ng-show="category.btncategory5"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="5" value="..." /></div>
+                        </div>
+                        <div class="request-infobox-context-container"> </div>
+                        <div class="request-infobox-context-container" ng-show="category.modelcontainer">
+                            <div class="request-infobox-context-name">Модель</div> @Html.TextBoxFor(x => x.AsppRequest.Model, new { @class = "request-infobox-context-input", ng_model = "category.model", @ng_init = "category.model ='" + Model.AsppRequest.Model + "'", @readonly = "readonly" }) @Html.HiddenFor(x => x.AsppRequest.ModelId, new { ng_model = "category.modelid", @ng_init = "category.modelid ='" + Model.AsppRequest.ModelId + "'", id = "modelid" }) <input type="button" class="request-infobox-context-button" ng-click="opendevicemodelsdialog()" value="..." />
+                        </div>
+                        <div id="modalcategories" style="display: none">
+                            <div class="aspp-categories-background">
+                                <div class="aspp-categories-header">
+                                    <div class="aspp-categories-header-text">Выбирите категорию</div>
+                                </div>
+                                <div class="aspp-categories-container">
+                                    <div class="aspp-categories-box">
+
+                                    </div>
+                                </div>
+                                <div style="clear: both"> </div>
+                                <div class="aspp-categories-control">
+                                    <button type="button" class="aspp-categories-button button-ok" ng-click="categoryacception()">ОК</button>
+                                    <button type="button" class="aspp-categories-button button-cancel">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modaldevicemodels" style="display: none">
+                            <div class="aspp-devicemodels-background">
+                                <div class="aspp-devicemodels-header">
+                                    <div class="aspp-devicemodels-header-text">Выбирите модель устройства</div>
+                                </div>
+                                <div class="aspp-devicemodels-container">
+                                    <div class="aspp-devicemodels-box">
+
+                                    </div>
+                                </div>
+                                <div style="clear: both"> </div>
+                                <div class="aspp-devicemodels-control">
+                                    <button type="button" class="aspp-devicemodels-button button-ok" ng-click="devicemodelacception()">ОК</button>
+                                    <button type="button" class="aspp-devicemodels-button button-cancel">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-header-clear"></div>
+                <div class="request-infobox-sm" ng-controller="RequestorCtrl">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Заявитель</div>
+                    </div>
+                    <div class="request-infobox-sm-context">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">ФИО</div> @Html.TextBoxFor(x => x.AsppRequest.RequestorName, new { @class = "request-infobox-context-input", ng_model = "requestor.requestorname", @ng_init = "requestor.requestorname ='" + Model.AsppRequest.RequestorName + "'", @readonly = "readonly" }) <input type="button" ng-click="openrequestordialog()" class="request-infobox-context-button" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подразделение</div> @Html.TextBoxFor(x => x.AsppRequest.Organization, new { @class = "request-infobox-context-input", ng_model = "requestor.department", @ng_init = "requestor.department ='" + Model.AsppRequest.Organization + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.AsppRequest.Department, new { @class = "request-infobox-context-input", ng_model = "requestor.subdepartment", @ng_init = "requestor.subdepartment ='" + Model.AsppRequest.Department + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Тел.</div> @Html.TextBoxFor(x => x.AsppRequest.Tel, new { @class = "request-infobox-context-input", ng_model = "requestor.tel", @ng_init = "requestor.tel ='" + Model.AsppRequest.Tel + "'", @readonly = "readonly" })
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="request-infobox-sm">
+                    <div class="request-infobox-header" ng-controller="RequestorCtrl">
+                        <div class="request-infobox-text">Место нахождения</div>
+                    </div>
+                    <div class="request-infobox-sm-context">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Адрес</div> @Html.TextBoxFor(x => x.AsppRequest.Address, new { @class = "request-infobox-context-input", ng_model = "requestor.address", @ng_init = "requestor.address ='" + Model.AsppRequest.Address + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Комната</div> @Html.TextBoxFor(x => x.AsppRequest.Room, new { @class = "request-infobox-context-input", ng_model = "requestor.room", @ng_init = "requestor.room ='" + Model.AsppRequest.Room + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Этаж</div> @Html.TextBoxFor(x => x.AsppRequest.Floor, new { @class = "request-infobox-context-input", ng_model = "requestor.floor", @ng_init = "requestor.floor ='" + Model.AsppRequest.Floor + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Площадка</div>
+                            <div class="request-infobox-context-select"> @Html.DropDownListFor(x => x.AsppRequest.Location, Model.Location, new { @readonly = "readonly" })</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="request-header-clear"> </div>
+                <div class="request-infobox-sm">
+
+                </div>
+                <div class="request-infobox-sm">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Исполнитель</div>
+                    </div>
+                    <div class="request-infobox-sm-context" ng-controller="AssignerCtrl">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Исполнитель</div> @Html.TextBoxFor(x => x.AsppRequest.AssignTo, new { @class = "request-infobox-context-input", @readonly = "readonly" }) <input type="button" class="request-infobox-context-button" ng-click="openassignerdialog()" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Ответственный</div>@Html.TextBoxFor(x => x.AsppRequest.AssignBoss, new { @class = "request-infobox-context-input", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Сектор</div> @Html.TextBoxFor(x => x.AsppRequest.AssignSubDepartment, new { @class = "request-infobox-context-input", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.AsppRequest.AssignDepartment, new { @class = "request-infobox-context-input", @readonly = "readonly" })
+                        </div>
+
+                        <div id="modalassigners" style="display: none">
+                            <div class="aspp-assigner-background">
+                                <div class="aspp-assigner-header">
+                                    <div class="aspp-assigner-header-text">Выбирите исполнителя</div>
+                                </div>
+                                <div class="aspp-assigner-container">
+                                    <div style="float: left">
+                                        <div class="aspp-assigner-head-note">
+                                            Подразделение
+                                        </div>
+                                        <div class="aspp-assigner-department-box">
+                                            <div class="aspp-assigner-department-item">Техподдержка</div>
+                                            <div class="aspp-assigner-department-item">Ремонт техники</div>
+                                            <div class="aspp-assigner-department-item">ИАС</div>
+                                            <div class="aspp-assigner-department-item">Видеонаблюдение</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin: 0 0 0 20px; float: left">
+                                        <div class="aspp-assigner-head-note">
+                                            Исполнители
+                                        </div>
+                                        <div class="aspp-assigner-box">
+                                            <div class="aspp-assigner-item">
+                                                <div class="aspp-assigner-tip"></div>
+                                                <div class="aspp-assigner-item-text">Viktor Kohan</div>
+                                            </div>
+                                            <div class="aspp-assigner-item">
+                                                <div class="aspp-assigner-tip"></div>
+                                                <div class="aspp-assigner-item-text">Andriy Borysenko</div>
+                                            </div>
+                                            <div class="aspp-assigner-item">
+                                                <div class="aspp-assigner-tip"></div>
+                                                <div class="aspp-assigner-item-text">Serhey Kvasha</div>
+                                            </div>
+                                            <div class="aspp-assigner-item-selected">
+                                                <div class="aspp-assigner-tip"></div>
+                                                <div class="aspp-assigner-item-text">Anatoliy Dzuba</div>
+                                            </div>
+                                            <div class="aspp-assigner-item">
+                                                <div class="aspp-assigner-tip"></div>
+                                                <div class="aspp-assigner-item-text">Serhey Kuzmik</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clear: both"> </div>
+                                <div class="aspp-assigner-control">
+                                    <button type="button" class="aspp-assigner-button button-ok">Принять</button>
+                                    <button type="button" class="aspp-assigner-button button-cancel">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="tab2">
+                <div class="request-work-sm">
+                    <div class="request-work-header">
+                        <div class="request-work-text">Время выполнения работы</div>
+                    </div>
+                    <div class="request-work-sm-context">
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.AsppRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.AsppRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.AsppRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.AsppRequest.StartTimeInWork), id = "starttimepicker" })
+                            <input type="button" class="request-work-context-button" value="..." />
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.AsppRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.AsppRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.AsppRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.AsppRequest.EndTimeInWork), id = "endtimepicker" })
+                            <input type="button" class="request-work-context-button" value="..." />
+                        </div>
+                        <div class="request-work-context-container">
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Затрачено</div> @Html.TextBoxFor(x => x.AsppRequest.TotalWorkInDays, new { @class = "request-work-context-total", @readonly = "readonly", id = "totaldays" })
+                            <div class="request-work-context-total-lable"> дн. </div> @Html.TextBoxFor(x => x.AsppRequest.TotalWorkInHours, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalhours" })
+                            <div class="request-work-context-total-lable">час.</div>@Html.TextBoxFor(x => x.AsppRequest.TotalWorkInMinutes, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalminutes" })
+                            <div class="request-work-context-total-lable">мин.</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="request-work-sm">
+                    <div class="request-work-header">
+                        <div class="request-work-text">Параметры работы</div>
+                    </div>
+                    <div class="request-work-sm-context">
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Причина неполадки</div>
+                            <div class="request-work-context-select">
+                                @Html.DropDownListFor(x => x.AsppRequest.Location, new List<SelectListItem>
+                                                              {
+                                                                  new SelectListItem {Value = "", Text = ""},
+                                                                  new SelectListItem {Value = "", Text = "Отказ оборудования"},
+                                                                  new SelectListItem {Value = "", Text = "Программная ошибка"},
+                                                                  new SelectListItem {Value = "", Text = "Ошибка пользователя"},
+                                                                  new SelectListItem {Value = "", Text = "Другое"}
+                                                              },
+                                                                  new { @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Профилактика</div>
+                            <div class="request-work-context-select">
+                                @Html.DropDownListFor(x => x.AsppRequest.Prevention, new List<SelectListItem>
+                                                             {
+                                                                 new SelectListItem {Value = "", Text = ""},
+                                                                 new SelectListItem {Value = "", Text = "Выполнялась"},
+                                                                 new SelectListItem {Value = "", Text = "Не выполнялась"}
+                                                             },
+                                                                 new { @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Выполнена удаленно</div> 
+                         <div id="show">
+                            <div class="checkbox-position">
+                                @Html.CheckBoxFor(x => x.AsppRequest.Remote)
+                                @Html.Label("AsppRequest.Remote", " ")
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="request-work-lg">
+                    <div class="request-work-header">
+                        <div class="request-work-text">Описание выполненной работы</div>
+                    </div>
+                    <div class="request-work-lg-context">
+                        <div class="request-work-context-lg-container">
+                            <div class="request-work-context-name">Описание проблемы</div> @Html.TextAreaFor(x => x.AsppRequest.TroubleDescription, new { @class = "request-work-context-lg-input", id = "troubledescription" })
+                        </div>
+                        <div class="request-work-context-lg-container">
+                            <div class="request-work-context-name">Решение проблемы</div> @Html.TextAreaFor(x => x.AsppRequest.ResolveDescription, new { @class = "request-work-context-lg-input", id = "resolvedescription" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="tab3">
+            <div class="request-history-input-box">
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Создано</div>
+                </div>
+                <div class="request-history-input">@Model.AsppRequestLog.WhoCreate</div>
+                <div class="request-header-clear"></div>
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Дата и время</div>
+                </div>
+                <div class="request-history-input">@Dates.DateNullConversion(Model.AsppRequestLog.CreateDate) @Dates.TimeNullConversion(Model.AsppRequestLog.ChangeDate)</div>
+            </div>
+            <div class="request-history-input-box">
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Изменено</div>
+                </div>
+                <div class="request-history-input">@Model.AsppRequestLog.WhoChange</div>
+                <div class="request-header-clear"> </div>
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Дата и время</div>
+                </div>
+                <div class="request-history-input">@Dates.DateNullConversion(Model.AsppRequestLog.ChangeDate) @Dates.TimeNullConversion(Model.AsppRequestLog.ChangeDate)</div>
+            </div>
+            <div class="request-header-clear"> </div>
+            <div class="request-history-log-box">
+                <div class="request-history-log-header">
+                    <div class="request-history-header-log-text">Детализация</div>
+                </div>
+                <div class="request-history-log-board">
+                    <div class="request-history-log-context">
+                        @if (Model.AsppRequestLog.LogTextCollection != null)
+                        {
+                            foreach (string logtext in Model.AsppRequestLog.LogTextCollection)
+                            {
+                                @logtext<br>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalholdon" style="display: none">
+        @using (Html.BeginForm("MakeHold", "AsppCallRequest", FormMethod.Post, new { id = "holdonform" }))
+        {
+            <div class="aspp-holdon-background">
+                <div class="aspp-holdon-header">
+                    <div class="aspp-holdon-header-text">Укажите причину продления заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.AsppRequest.CallRequestId)
+                <div class="aspp-holdon-container">
+                    @Html.TextArea("description", new { @class = "aspp-holdon-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="aspp-holdon-control">
+                    <button type="submit" class="aspp-holdon-button button-ok">Продлить</button>
+                    <button type="button" class="aspp-holdon-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="modalreturnto" style="display: none">
+        @using (Html.BeginForm("ReturnToAssigner", "AsppCallRequest", FormMethod.Post, new { id = "returntoform" }))
+        {
+            <div class="aspp-returnto-background">
+                <div class="aspp-returnto-header">
+                    <div class="aspp-returnto-header-text">Укажите причину возврата заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.AsppRequest.CallRequestId)
+                <div class="aspp-returnto-container">
+                    @Html.TextArea("description", new { @class = "aspp-returnto-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="aspp-returnto-control">
+                    <button type="submit" class="aspp-returnto-button button-ok">Вернуть</button>
+                    <button type="button" class="aspp-returnto-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="modaldeny" style="display: none">
+        @using (Html.BeginForm("Deny", "AsppCallRequest", FormMethod.Post, new { id = "denyform" }))
+        {
+            <div class="aspp-returnto-background">
+                <div class="aspp-returnto-header">
+                    <div class="aspp-returnto-header-text">Укажите причину возврата заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.AsppRequest.CallRequestId)
+                <div class="aspp-returnto-container">
+                    @Html.TextArea("description", new { @class = "aspp-returnto-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="aspp-returnto-control">
+                    <button type="submit" class="aspp-returnto-button button-ok">Вернуть</button>
+                    <button type="button" class="aspp-returnto-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+<div id="modaldevices" style="display: none">
+        <div class="aspp-devices-background" ng-controller="DeviceInfoCtrl">
+            <div class=" aspp-devices-header">
+                <div class="aspp-devices-header-text">Выбирите устройство</div>
+            </div>
+            <div class="aspp-devices-container">
+                <div class="aspp-devices-search-box">
+                    <input type="text" ng-model="searchdevice" class="aspp-devices-search-input" placeholder="Введите инвентерный новер..." />
+                    <button type="button" ng-click="search()" class="aspp-devices-search-button">Найти</button>
+                </div>
+                <div class="aspp-devices-box">
+                    <div class="aspp-devices-item" data-index="0" ng-click="item($event)">
+                        X1234 - Системный блок
+                    </div>
+                    <div class="aspp-devices-item" data-index="1" ng-click="item($event)">
+                        0002313m - Тонкий клиент
+                    </div>
+                    <div class="aspp-devices-item" data-index="2" ng-click="item($event)">
+                        4521 - Монитор
+                    </div>
+                </div>
+                <div style="clear: both"> </div>
+                <div class="aspp-devices-control">
+                    <button type="button" ng-click="deviceacception()" class="aspp-devices-button button-ok">Принять</button>
+                    <button type="button" class="aspp-devices-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalrequestors" style="display: none" ng-controller="RequestorCtrl">
+        <div class="aspp-requestors-background">
+            <div class="aspp-requestors-header">
+                <div class="aspp-requestors-header-text">Выбирите заявителя</div>
+            </div>
+            <div class="aspp-requestors-container">
+                <div class="aspp-requestors-search-box">
+                    <input type="text" class="aspp-requestors-search-input" ng-model="searchrequestor" placeholder="Введите имя заявителя..." />
+                    <button type="button" ng-click="searchallrequestors()" class="aspp-requestors-search-button">Найти</button>
+                </div>
+                <div class="aspp-requestors-box"></div>
+            </div>
+            <div style="clear: both"> </div>
+            <div class="aspp-requestors-control">
+                <button type="button" class="aspp-requestors-button button-ok" ng-click="requestoracception()">Принять</button>
+                <button type="button" class="aspp-requestors-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    @Styles.Render("~/Content/AsppRequestModals")
+
+
+</body>
+</html>

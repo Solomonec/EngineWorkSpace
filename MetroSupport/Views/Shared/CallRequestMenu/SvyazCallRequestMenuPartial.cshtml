@@ -1,0 +1,15 @@
+﻿@using MetroSupport.Helpers
+<div class="main-request-menu-delimiter"></div>
+<div class="main-request-menu-subheader svyaz-subheader-color">Открытые заявки</div>
+@Html.MenuLink("Все", "SvyazOpenCallRequests", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате", "SvyazOpenCallRequestsByDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По ответственному и дате", "SvyazOpenCallRequestsByBossAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По исполнителю и дате", "SvyazOpenCallRequestsByAssignerAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+<div class="main-request-menu-subheader svyaz-subheader-color">Все заявки</div>
+@Html.MenuLink("Все", "SvyazAllCallRequests", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате", "SvyazAllCallRequestsByDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате обработки", "SvyazAllCallRequestsByDateInProduce", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По статусу", "SvyazAllCallRequestsByStatus", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По ответственному и дате", "SvyazAllCallRequestsByBossAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По исполнителю и дате", "SvyazAllCallRequestsByAssignerAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+<div class="main-request-menu-delimiter"></div>

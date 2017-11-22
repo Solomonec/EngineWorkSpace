@@ -1,0 +1,57 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.DeviceModelsViewModel
+@{
+    ViewBag.Title = "ASPP";
+    Layout = "~/Areas/Administration/Views/DeviceModels/_DevicesLayout.cshtml";
+}
+
+<button id="adddevicemodel" class="adm-user-newperson-button adm-color-aspp">Добавить модель</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-aspp">
+                <td>Индексатор</td>
+                <td>Название модели</td>
+                <td width="40px"></td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var device in Model.DeviceModels)
+                {
+                    <tr>
+                        <td>@device.ModelIndexator</td>
+                        <td>@device.ModelName</td>
+                        <td><span class="editico" data-modelid="@device.ModelId"></span></td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveDeviceModel", new { modelid = @device.ModelId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+             </tr>
+
+
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@if (Model != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.DeviceModels.PageSize, Model.DeviceModels.PageNumber, Model.DeviceModels.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+
+@Html.Partial("Modals/DeviceModelModalPartial", Model.DeviceModel) 

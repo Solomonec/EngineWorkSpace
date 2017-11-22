@@ -1,0 +1,49 @@
+﻿@model MetroSupport.Models.RequestOwner
+<div id="modalrequestor" style="display: none">
+    @using (Html.BeginForm("CreateRequestOwner", "RequestOwners", FormMethod.Post, new { id = "requestorform" }))
+        {
+    <div class="requestor-modal-background">
+        <div class="requestor-modal-header">
+            <div class="header-text">Заявитель</div>
+        </div>
+        <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+           
+        </div>
+              @Html.HiddenFor(modal => modal.RequestorId, new { id = "requestorid" })
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Имя заявителя</div> @Html.TextBoxFor(model => model.RequestorName, new {@class = "requestor-modal-input", id = "requestorname"}) @Html.ValidationMessageFor(x => x.RequestorName)
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">ФИО</div> @Html.TextBoxFor(model => model.RequestorAltName, new { @class = "requestor-modal-input", id = "requestoraltname" }) @Html.ValidationMessageFor(x => x.RequestorAltName)
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Должность</div> @Html.TextBoxFor(model => model.Job, new { @class = "requestor-modal-input", id = "job" }) @Html.ValidationMessageFor(x => x.Job)
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Служба</div> @Html.TextBoxFor(model => model.Organization, new { @class = "requestor-modal-input", id = "organization" }) @Html.ValidationMessageFor(x => x.Organization)
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Отдел</div> @Html.TextBoxFor(model => model.Department, new { @class = "requestor-modal-input", id = "department" })  @Html.ValidationMessageFor(x => x.Department)
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Адрес</div> @Html.TextBoxFor(model => model.Address, new { @class = "requestor-modal-input", id = "address" }) 
+            </div>
+            <div class="requestor-modal-inputblock">
+              <div class="requestor-modal-label">"Этаж"</div> @Html.TextBoxFor(model => model.Floor, new { @class = "requestor-modal-input", id = "floor" })
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Комната</div> @Html.TextBoxFor(model => model.Room, new { @class = "requestor-modal-input", id = "room" }) 
+            </div>
+            <div class="requestor-modal-inputblock">
+                <div class="requestor-modal-label">Тел</div> @Html.TextBoxFor(model => model.Tel, new { @class = "requestor-modal-input", id = "tel" }) 
+            </div>
+           
+            <div style="clear: both"></div>
+            <div class="requestor-modal-control">
+                <button type="submit" class="requestor-modal-button button-save">Сохранить</button>
+                <button type="button" class="requestor-modal-button button-cancel">Отменить</button>
+            </div>
+        
+    </div>
+    }
+</div>

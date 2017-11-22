@@ -1,0 +1,144 @@
+.aspp-assigner-background {
+	width: 600px;
+	height: 500px;
+	background-color: #E5E5E5;
+}
+
+.aspp-assigner-header {
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #03B4E1 0%, #03B4E1 20%, #037B9A 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+.aspp-assigner-header-text {
+	margin: 8px 0 0 16px;
+	color: white;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	position:absolute;
+}
+
+.aspp-assigner-container{
+	margin: 38px 0 0 16px;
+}
+
+.aspp-assigner-head-note {
+	height: 13px;
+	color: black;
+	margin: 0 0 9px 0;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	text-decoration: underline;
+	text-align: center;
+
+}
+
+.aspp-assigner-department-box {
+	width: 213px;
+	height: 348px;
+	background-color: #E5E5E5;
+	border: 3px solid #D7D7D7;
+	box-shadow: inset 0 -5px 24px rgba(0, 0, 0, 0.2);
+}
+
+.aspp-assigner-box {
+	width: 322px;
+	height: 348px;
+   	background-color: #E5E5E5;
+	border: 3px solid #D7D7D7;
+	box-shadow: inset 0 -5px 24px rgba(0, 0, 0, 0.2);
+}
+
+.aspp-assigner-department-item{
+	
+	padding: 12px 0 12px 0;
+	background-image: linear-gradient(to top, #6b6c6d 0%, #c9cace 8%, white 95%, white 100%);
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	cursor:pointer;
+}
+
+.aspp-assigner-department-item:hover{
+	background-image: linear-gradient(to top, #6b6c6d 0%, #03B4E1 6%, white 100%);
+}
+
+.aspp-assigner-item{
+	height: 30px;
+	color:#313131;
+    font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #C0C0C0 0%, #CECECE 6%, #FCFCFC 94%, #FCFCFC 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.aspp-assigner-item:hover{
+	background-image: linear-gradient(to top, #6b6c6d 0%, #03B4E1 6%, white 100%);
+}
+
+.aspp-assigner-item-selected{
+	height: 30px;
+	color:#FFFFFF;
+     font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #6E6F6E 0%, #595858 21%, #898989 87%, #767575 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.aspp-assigner-item-text{
+	margin: 5px 0 0 10px;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	float:left;
+}
+
+.aspp-assigner-tip {
+	width: 32px;
+	height: 30px;
+	background-color: #0e287c;
+	background-image: url('img/tip.png');
+	border-radius: 5px 0px 0px 5px;
+	float:left;
+}
+.aspp-assigner-control{
+   
+   margin: 8px 17px 0 17px;
+}
+
+.aspp-assigner-button {
+	width: 122px;
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #03B4E1 0%, #03B4E1 20%, #037B9A 100%);
+	border-radius: 5px;
+	border:none;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+	color: white;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	cursor:pointer;
+}
+
+.button-ok
+{
+   float:left;
+}
+
+.button-cancel
+{
+   float:right;
+}
+

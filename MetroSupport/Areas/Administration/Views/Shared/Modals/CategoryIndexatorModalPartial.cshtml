@@ -1,0 +1,44 @@
+﻿@model MetroSupport.Models.CategoryIndexator
+<div id="modalindexator" style="display:none">
+    @using (Html.BeginForm("CreateCategoryIndexator", "Indexators", FormMethod.Post, new {id = "indexatorform"}))
+    {
+        <div class="indexator-modal-background">
+            <div class="indexator-modal-header">
+                <div class="header-text">Индексатор</div>
+            </div>
+            <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+            </div>
+            @Html.HiddenFor(x => x.IndexatorId, new{id="indexatorid"})
+            <div class="indexator-modal-inputblock">
+                <div class="indexator-modal-label">Ключ индексатора</div> @Html.TextBoxFor(model => model.CategoryIndexatorName, new {@class = "indexator-modal-input", id = "indexator"}) @Html.ValidationMessageFor(x => x.CategoryIndexatorName)
+            </div>
+            <div class="indexator-modal-inputblock">
+                <div class="indexator-modal-label">Отдел</div><div class="indexator-select">
+                    @Html.DropDownListFor(model => model.CategoryType, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "Base", Text = "Базовый"},
+                                                                                                new SelectListItem(){Value = "Sub", Text = "Составной"},
+                                                                                           
+                                                                                            }, "Выберите тип...", new { id = "categorytypelist" }) @Html.ValidationMessageFor(x => x.CategoryType)
+                                                                                        </div>
+                                                                                    </div>
+            <div class="indexator-modal-inputblock">
+                <div class="indexator-modal-label">Отдел</div><div class="indexator-select">@Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            }, "Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department)
+                                                                                        </div> 
+            </div>
+            <div style="clear: both"></div>
+            <div class="indexator-modal-control">
+                <button type="submit" class="indexator-modal-button button-save">Сохранить</button>
+                <button type="submit" class="indexator-modal-button button-cancel">Отменить</button>
+            </div>
+
+        </div>
+    }
+</div>

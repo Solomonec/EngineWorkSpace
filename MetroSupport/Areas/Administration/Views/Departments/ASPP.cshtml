@@ -1,0 +1,54 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.DepartmentViewModel
+@{
+    ViewBag.Title = "ASPP";
+    Layout = "~/Areas/Administration/Views/Departments/_DepartmentsLayout.cshtml";
+}
+
+<button id="adddepartment" class="adm-user-newperson-button adm-color-aspp">Добавить отдел</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-aspp">
+                <td>Название отдела</td>
+                <td>Тип</td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var department in Model.Departments)
+                {
+                    <tr>
+                        
+                        <td>@department.SubDepartmentName</td>
+                        <td>@department.DepartmentType</td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveDepartment", new { departmentid = @department.DepartmentId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+                    </tr>
+
+
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@if (Model != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.Departments.PageSize, Model.Departments.PageNumber, Model.Departments.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+@Html.Partial("Modals/DepartmentModalPartial", Model.Department)

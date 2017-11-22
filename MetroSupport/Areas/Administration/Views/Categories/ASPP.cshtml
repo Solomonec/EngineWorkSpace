@@ -1,0 +1,64 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.AsppCategoryViewModel
+@{
+    ViewBag.Title = "ASPP";
+    Layout = "~/Areas/Administration/Views/Categories/_CategoriesLayout.cshtml";
+}
+
+<button id="addcategory" class="adm-user-newperson-button adm-color-aspp">Добавить категорию</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-aspp">
+                <td>Индекс</td>
+                <td>Категория</td>
+                <td>Подкатегория</td>
+                <td>Модель</td>
+                <td width="40px"></td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var category in Model.AsppCategories)
+                {
+                    <tr>
+                        <td>@category.CategoryIndexator</td>
+                        <td>@category.CategoryName</td>
+                        <td>@category.NextSubCategory</td>
+                        <td>@category.ModelIndexator</td>
+                        <td><span class="editico" data-categoryid="@category.CategoryId"></span></td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveAsppCategory", new { categoryid = @category.CategoryId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+
+                    </tr>
+
+
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@if (Model != null)
+{
+    <div style ="height:45px">
+        @Html.Pager(Model.AsppCategories.PageSize, Model.AsppCategories.PageNumber, Model.AsppCategories.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+        @Html.Partial("Modals/AsppCategoryModalPartial", Model.AsppCategory)
+}
+
+@Scripts.Render("~/bundles/asppcategorymodal")

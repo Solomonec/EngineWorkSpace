@@ -1,0 +1,136 @@
+﻿@model MetroSupport.ViewModels.FilterViewModel
+<div id="modalreport" style="display: none">
+    @using (Html.BeginForm("Report", "ItCallRequestList", FormMethod.Post, new { id = "reportform" }))
+    {
+        <div class="it-report-background">
+            <div class="it-report-header">
+                <div class="it-report-header-text">Формирование отчета</div>
+            </div>
+            <div style="margin: 18px 0 0 20px; float: left">
+                <div class="it-report-box-left">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По персоналу</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Исполнитель</div>@Html.TextBoxFor(x => x.Assigner, new { @class = "it-report-input", id = "ReportAssigner" })
+                        </div>
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Ответственный</div>@Html.TextBoxFor(x => x.Boss, new { @class = "it-report-input", id = "ReportBoss" })
+                        </div>
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Заявитель</div>@Html.TextBoxFor(x => x.Requestor, new { @class = "it-report-input", id = "ReportRequestor" })
+                        </div>
+                    </div>
+                </div>
+                <div class="it-report-box-left">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По дате</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-date-input-lable">С</div>@Html.TextBoxFor(x => x.StartDate, new { @class = "it-report-input date-text-center", id = "startdatepickerreport" })
+                        </div>
+                        <div class="it-report-container">
+                            <div class="it-report-date-input-lable">По</div>@Html.TextBoxFor(x => x.EndDate, new { @class = "it-report-input date-text-center", id = "enddatepickerreport" })
+                        </div>
+                    </div>
+                </div>
+                <div class="it-report-box-left">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По статусу</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Статус заявки</div><div class="it-report-select">
+                                @Html.DropDownListFor(model => model.Status, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "-1", Text = "Отклонена"},
+                                                                                                new SelectListItem(){Value = "5", Text = "Назначена"},
+                                                                                                new SelectListItem(){Value = "4", Text = "Отложена"},
+                                                                                                new SelectListItem(){Value = "9", Text = "Ожидается подтверждение"},
+                                                                                                 new SelectListItem(){Value = "12", Text = "Закрыта"}
+                                                                                            }, "Выберите статус...", new { id = "statuslist" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="margin: 18px 0 0 40px; float: left">
+                <div class="it-report-box-right">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По устройству</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Название</div>@Html.TextBoxFor(x => x.DeviceName, new { @class = "it-report-input" })
+                        </div>
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Mодель</div>@Html.TextBoxFor(x => x.DeviceModel, new { @class = "it-report-input" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="it-report-box-right">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По теме проблемы</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-theme-input-lable">Тема</div> <div class="it-report-theme-select">
+                                @Html.DropDownListFor(model => model.TroubleTheme, new List<SelectListItem> { }, new { id = "reportthemelist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="it-report-box-right">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По неисправности</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Причина</div><div class="it-report-select">
+                                @Html.DropDownListFor(model => model.TroubleReason, new List<SelectListItem>
+                                {
+                                    new SelectListItem {Value = "1", Text = "Другое"},
+                                    new SelectListItem {Value = "2", Text = "Отказ оборудования"},
+                                    new SelectListItem {Value = "3", Text = "Ошибка пользователя"},
+                                    new SelectListItem {Value = "4", Text = "Программная ошибка"}
+                                }, "Выберите причину...", new { id = "reasonlist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="it-report-box-right">
+                    <div class="it-report-box-header">
+                        <div class="it-report-box-header-text">По техобслуживанию</div>
+                    </div>
+                    <div class="it-report-box-wrap">
+                        <div class="it-report-container">
+                            <div class="it-report-input-lable">Профилактика</div>
+                            <div class="it-report-select">
+                                @Html.DropDownListFor(model => model.Prevention, new List<SelectListItem>
+                                {
+                                    new SelectListItem {Value = "1", Text = "Выполнялась"},
+                                    new SelectListItem {Value = "2", Text = "Не выполнялась"},
+                                }, "Выберите профилактику...", new { id = "reasonlist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="it-report-control">
+                <button type="submit" class="it-report-button button-ok">Отчет</button>
+                <button type="button" class="it-report-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    }
+</div>

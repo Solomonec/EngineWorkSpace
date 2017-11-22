@@ -1,0 +1,43 @@
+﻿@model MetroSupport.Models.DeviceModel
+<div id="modaldevice" style="display: none">
+   @using (Html.BeginForm("CreateModel", "DeviceModels", FormMethod.Post, new { id = "devicemodelform" }))
+   {
+
+    <div class="devicemodel-modal-background">
+        <div class="devicemodel-modal-header">
+            <div class="header-text">Устройство</div>
+        </div>
+        <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+        </div>
+        @Html.HiddenFor(model => model.ModelId, new{id="modelid"})
+        <div class="devicemodel-modal-inputblock">
+            <div class="devicemodel-modal-label">Индексатор</div><div class="devicemodel-select"> @Html.DropDownListFor(model => model.ModelIndexator, new List<SelectListItem>{
+
+           }, new { id = "modelindexatorlist" }) @Html.ValidationMessageFor(x => x.ModelIndexator)
+                </div>
+            
+        </div>
+        <div class="devicemodel-modal-inputblock">
+            <div class="devicemodel-modal-label">Модель</div> @Html.TextBoxFor(model => model.ModelName, new {@class = "devicemodel-modal-input", id = "modelname"}) @Html.ValidationMessageFor(x => x.ModelName)
+        </div>
+        <div class="devicemodel-modal-inputblock">
+            <div class="devicemodel-modal-label">Отдел</div>
+            <div class="devicemodel-select">
+                @Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                     {
+                         new SelectListItem() {Value = "It", Text = "ИТ"},
+                         new SelectListItem() {Value = "Svyaz", Text = "Связь"},
+                         new SelectListItem() {Value = "Aspp", Text = "АСПП"},
+                         new SelectListItem() {Value = "Pa", Text = "ПА"}
+                     }, "Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department)
+                </div> 
+        </div>
+        <div style="clear: both"></div>
+        <div class="devicemodel-modal-control">
+            <button type="submit" class="devicemodel-modal-button button-save">Сохранить</button>
+            <button type="submit" class="devicemodel-modal-button button-cancel">Отменить</button>
+        </div>
+    </div>
+   }
+</div>

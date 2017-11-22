@@ -1,0 +1,140 @@
+.pa-devices-background {
+	width: 600px;
+	height: 500px;
+	background-color: #E5E5E5;
+}
+
+.pa-devices-header {
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #E3BA57 0%, #C88B16 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+
+.pa-devices-header-text {
+	margin: 8px 0 0 16px;
+	color: white;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	position:absolute;
+}
+
+.pa-devices-container{
+	margin: 28px 0 0 16px;
+}
+
+.pa-devices-box {
+	width: 562px;
+	height: 308px;
+	background-color: #E5E5E5;
+	border: 3px solid #D7D7D7;
+	box-shadow: inset 0 -5px 24px rgba(0, 0, 0, 0.2);
+    overflow: auto;
+}
+
+.pa-devices-item{
+	height: 30px;
+	color:#313131;
+     font-family: Arial;
+	font-size: 14px;
+	font-weight: 600;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #C0C0C0 0%, #CECECE 6%, #FCFCFC 94%, #FCFCFC 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.pa-devices-item:hover{
+	background-image: linear-gradient(to top, #6b6c6d 0%, #E3BA57 6%, white 100%);
+}
+
+.pa-devices-item-selected{
+	height: 30px;
+	color:#FFFFFF;
+     font-family: Arial;
+	font-size: 14px;
+	font-weight: 600;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #6E6F6E 0%, #595858 21%, #898989 87%, #767575 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.pa-devices-item-text{
+	margin: 5px 0 0 10px;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	float:left;
+}
+
+.pa-devices-control{
+   
+   margin: 23px 17px 0 0;
+}
+
+.pa-devices-search-box
+{
+	height:30px;
+	margin: 0 0 10px 0;
+}
+
+.pa-devices-search-button {
+	width: 54px;
+	height: 30px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #E3BA57 0%, #C88B16 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+    font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+    color: white;
+	border:none;
+	display:block;
+	float:left;
+}
+
+.pa-devices-search-input {
+	width: 504px;
+	height: 30px;
+	padding:0 0 0 10px;
+	margin:0 0 ;
+	color:#555555;
+	background-color: #E5E5E5;
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	border:none;
+	display:block;
+	float:left
+}
+
+.pa-devices-button {
+	width: 122px;
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #E3BA57 0%, #C88B16 100%);
+	border-radius: 5px;
+	border:none;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+	color: white;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	cursor:pointer;
+}
+
+.button-ok
+{
+   float:left;
+}
+
+.button-cancel
+{
+   float:right;
+}
+

@@ -1,0 +1,86 @@
+﻿@using MetroSupport.Helpers
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Заявки ПА</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/PaRequestList")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+
+    <link href="@Url.Content("~/Content/PaGridTheme/bui/AwesomeMvc.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/PaGridTheme/bui/awem.css")" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/bundles/PaRequestList")
+
+</head>
+<body>
+    <div class="header-panel">@Html.Action("UserProfile", "Account")</div>
+    <div class="logo-box">
+        <div class="logo"></div>
+    </div>
+    <div class="main-request-menu-box">
+        <div class="main-request-menu-delimiter"></div>
+        <div class="main-request-menu-subheader">Открытые заявки</div>
+        @Html.MenuLink("Все", "OpenCallRequests", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По дате", "OpenCallRequestsByDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По ответственному и дате", "OpenCallRequestsByBossAndDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По исполнителю и дате", "OpenCallRequestsByAssignerAndDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        <div class="main-request-menu-subheader">Все заявки</div>
+        @Html.MenuLink("Все", "AllCallRequests", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По дате", "AllCallRequestsByDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По дате обработки", "AllCallRequestsByDateInProduce", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По статусу", "AllCallRequestsByStatus", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По ответственному и дате", "AllCallRequestsByBossAndDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По исполнителю и дате", "AllCallRequestsByAssignerAndDate", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        @Html.MenuLink("По заявителю", "AllCallRequestsByRequestor", "PaCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+        <div class="main-request-menu-delimiter"></div>
+    </div>
+    <div class="main-requests-info-box">
+        <button id="newrequest" class="button-control-style">Новая заявка</button>
+        @if (User.IsInRole("Administrator"))
+        {
+            <button id="deleterequest" class="button-control-style">Удалить</button>
+        }
+           <button id="report" class="button-control-style">Отчет</button>
+        @using (Html.BeginForm("SimpleSearch", "PaCallRequestList", FormMethod.Post, new { id = "simplesearchform", style = "float: right; display: block" }))
+        {
+            <button id="bthsearch" type="submit" class="button-search">Найти</button>
+            <button id="advsearch" type="button" class="button-search-add">+</button>
+            @Html.TextBox("searchvalue", "", new { @class = "input-search-string", @placeholder = "Введите фразу..." })
+        }
+        <div style="clear: both"></div>
+        <div style="margin: 20px 10px 10px 10px;">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="@Url.Content("~/Scripts/AweGrid/AwesomeMvc.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/AweGrid/utils.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/AweGrid/awem.js")" type="text/javascript"></script>
+    <script>
+    function formatComment(callrequests, prop) {
+        var comment = callrequests[prop];
+        if (comment.trim() !== "")
+            return comment.substring(0, 40) + "...";
+        else {
+            return comment;
+        }
+    };
+
+    function formatStatus(callrequests, prop) {
+        var status = callrequests["RequestStatus"];
+        switch (status) {
+            case "Закрыто": return "<div style='color: green; text-width:bold;'>" + status + "</div>";
+            case "Назначена (В работе)": return "<div style='color: blue; text-width:bold;'>" + status + "</div>";
+            case "Отклонена": return "<div style='color: red; text-width:bold;'>" + status + "</div>";
+            case "Ожидается подтверждение ответственного": return "<div style='color: orange; text-width:bold;'>" + status + "</div>";
+        default:
+            return status;
+        }
+    }
+
+    </script>
+</body>
+</html>

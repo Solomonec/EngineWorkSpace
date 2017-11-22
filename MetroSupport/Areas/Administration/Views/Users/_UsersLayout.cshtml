@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Areas/Administration/Views/_AdministrationLayout.cshtml";
+    ViewBag.CurrentAction = ViewContext.RouteData.GetRequiredString("action");
+}
+<div>
+    <div>
+        @Html.ActionLink("Новый пользователь", "Registration", null, new { @class = "adm-user-newusrbutton" })
+    </div>
+    <div class="adm-user-menu">
+        <ul class="adm-user-point">
+            <li class="adm-user-point-it">@Html.ActionLink("IT", "It", "Users")</li>
+            <li class="adm-user-point-svyaz">@Html.ActionLink("Связь", "Svyaz", "Users")</li>
+            <li class="adm-user-point-aspp">@Html.ActionLink("АСПП", "Aspp", "Users")</li>
+            <li class="adm-user-point-pa">@Html.ActionLink("ПА", "Pa", "Users")</li>
+        </ul>
+    </div>
+    @RenderBody()
+</div>

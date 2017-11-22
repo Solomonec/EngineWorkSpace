@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+}
+
+<!doctype html>
+<html ng-app="MetroWidgetApp">
+<head>
+    <meta charset="utf-8">
+    <title>MetroSuppot</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link href="http://allfont.ru/allfont.css?fonts=a_lcdnova" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/Main")
+    @Scripts.Render("~/bundles/jquery")
+    @if (User.IsInRole("ItWork") || User.IsInRole("ItBoss") || User.IsInRole("AsppWork") || User.IsInRole("AsppBoss") || User.IsInRole("PaWork") || User.IsInRole("PaBoss")
+     || User.IsInRole("SvyazWork") || User.IsInRole("SvyazBoss"))
+    {
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/widgetcontroller")
+    }
+
+</head>
+<body>
+    <div class="user-head-panel">
+    <div style="float: right">
+       @Html.Action("UserProfile", "Account")
+    </div>
+    </div>
+    <div class="logo">
+    </div>   
+    <div style="margin:auto 10%;">
+        <div class="main-menu-wraper">
+            <div class="main-menu-header">
+                <span class="main-menu-head-icons main-ico"></span>
+                <div class="main-menu-header-text">Главное меню</div>
+            </div>
+            <a href="/Routes/RouteDetermination" class="main-menu-point">
+                <div class="main-menu-point-deco">
+                    <span class="main-menu-icons"><span class="request-ico"></span></span>
+                </div>
+                <div class="main-menu-point-text">Просмотреть заявки</div>
+            </a>
+            <a href="http://devicebase.metro.local" target="_blank" class="main-menu-point">
+                <div class="main-menu-point-deco">
+                    <span class="main-menu-icons"><span class="devicebase-ico"></span></span>
+                </div>
+                <div class="main-menu-point-text">База оборудования</div>
+            </a>
+            @if (User.IsInRole("Administrator"))
+            {
+                <a href="/Administration" class="main-menu-point">
+                    <div class="main-menu-point-deco">
+                        <span class="main-menu-icons"><span class="admin-ico"></span></span>
+                    </div>
+                    <div class="main-menu-point-text">Администрирование</div>
+                </a>
+            }
+            <a href="#" class="main-menu-point">
+                <div class="main-menu-point-deco">
+                    <span class="main-menu-icons"><span class="help-ico"></span></span>
+                </div>
+                <div class="main-menu-point-text">Справочник</div>
+            </a>
+
+        </div>
+@if (User.IsInRole("ItWork") || User.IsInRole("ItBoss") || User.IsInRole("AsppWork") || User.IsInRole("AsppBoss") || User.IsInRole("PaWork") || User.IsInRole("PaBoss")
+     || User.IsInRole("SvyazWork") || User.IsInRole("SvyazBoss"))
+{
+    <div style="float: right;">
+        <div class="statistic-menu-border" ng-controller="RequestsCountCtrl">
+            <div class="statistic-menu-header">
+                <span class="main-menu-head-icons statistic-ico"></span>
+                <div class="main-menu-header-text">Статистика</div>
+            </div>
+            <div class="statistic-menu-background">
+                <div class="statistic-number-box">
+                    <div class="statistic-number-box-header statistic-boxtext-blue">В работе</div>
+                    <div class="statistic-boxtext-blue">{{inwork}}</div>
+                </div>
+                <div class="statistic-number-box">
+                    <div class="statistic-number-box-header statistic-boxtext-yellow">Отложено</div>
+                    <div class="statistic-boxtext-yellow">{{holdon}}</div>
+                </div>
+                <div class="statistic-number-box">
+                    <div class="statistic-number-box-header statistic-boxtext-green">Выполнено</div>
+                    <div class="statistic-boxtext-green">{{close}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toprequest-menu-border" ng-controller="TopRequestsCtrl">
+            <div class="toprequest-background">
+                <div class="toprequest-header">
+                    <span class="main-menu-head-icons toprequest-ico"></span>
+                    <div class="main-menu-header-text">Топ новых заявок</div>
+                </div>
+                <div id="requestscontainer">
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+</div>
+</body>
+</html>

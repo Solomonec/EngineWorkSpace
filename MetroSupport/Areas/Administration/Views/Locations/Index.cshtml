@@ -1,0 +1,58 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.LocationViewModel
+@{
+    ViewBag.Title = "Расположение";
+    Layout = "~/Areas/Administration/Views/Locations/_LocationsLayout.cshtml";
+}
+
+
+
+<button id="addlocation" class="adm-user-newperson-button adm-color-default">Добавить площадку</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-default">
+                <td>Площадка</td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var location in Model.Locations)
+                {
+                    <tr>
+                        <td>@location.LocationName</td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveLocation", new { locationid = @location.LocationId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+
+                    </tr>
+
+
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.Locations.PageSize, Model.Locations.PageNumber, Model.Locations.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+@Html.Partial("Modals/LocationModalPartial", Model.Location)
+
+

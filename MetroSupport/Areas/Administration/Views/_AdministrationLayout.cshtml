@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Administration</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        @Styles.Render("~/Content/Admin")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+       
+    </head>
+    <body>
+        <div class="user-head-panel">
+            @Html.Action("UserProfile", "Users")
+        </div>
+        <div class="logo">
+
+        </div>
+    <div style="margin: auto 2%; width: auto">
+        <div class="main-menu-wraper">
+            <div class="main-menu-background">
+                <div class="adm-assign">
+                    <ul class="main-menu-point">
+                        <li>@Html.ActionLink("Пользователи", "It", "Users")</li>
+                        <li>@Html.ActionLink("Исполнители", "It", "Assigners")</li>
+                        <li>@Html.ActionLink("Ответственные", "It", "Bosses")</li>
+                        <li>@Html.ActionLink("Заявители", "Index", "RequestOwners")</li>
+                        <li>@Html.ActionLink("Подразделения", "IT", "Departments")</li>
+                        <li>@Html.ActionLink("Категории", "It", "Categories")</li>
+                        <li>@Html.ActionLink("Темы заявок", "It", "Themes")</li>
+                        <li>@Html.ActionLink("Индексаторы", "It", "Indexators")</li>
+                        <li>@Html.ActionLink("Расположения", "Index", "Locations")</li>
+                        <li>@Html.ActionLink("Устройства", "It", "DeviceModels")</li>
+                    </ul>
+                    <div style="clear: both"></div>
+                </div>
+
+                @RenderBody()
+
+
+            </div>
+        </div>
+    </div>
+        
+    </body>
+</html>

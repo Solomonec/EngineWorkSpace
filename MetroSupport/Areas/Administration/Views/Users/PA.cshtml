@@ -1,0 +1,61 @@
+﻿@using MvcPaging
+@model IPagedList<MetroSupport.Models.UserProfile>
+@{
+    ViewBag.Title = "ПА";
+    Layout = "~/Areas/Administration/Views/Users/_UsersLayout.cshtml";
+    const string alfabetic = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+<div class="adm-user-verb-panel">
+    @foreach (char t in alfabetic)
+    {
+        @Html.ActionLink(t.ToString(), "Pa", "Users", new { literal = t }, new { @class = "adm-user-verb adm-color-pa" })
+    }
+</div>
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-pa">
+                <td>Имя пользователя</td>
+                <td>Логин</td>
+                <td>Должность</td>
+                <td>E-mail</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var profile in Model)
+                {
+                    <tr>
+                        <td>@profile.FullName</td>
+                        <td>@profile.UserName</td>
+                        <td>@profile.Job</td>
+                        <td>@profile.Email</td>
+                        <td>@Html.ActionLink("Подробнее", "Manage", null, new { userid = profile.UserId })</td>
+                        <td>@Html.ActionLink("Удалить", "DeleteUser", new { username = profile.UserName })</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").AddRouteValue("literal", ViewBag.Literal).MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}

@@ -1,0 +1,116 @@
+html
+{
+	margin:0;
+	padding:0;
+	height:800px;
+	position:relative;
+}
+
+
+.location-modal-background {
+	width: 500px;
+	
+	background-color: #E5E5E5;
+}
+
+.location-modal-header{
+	height: 36px;
+	background-color: #469eec;
+	background-image: linear-gradient(180deg, #007894 0%, #003B62 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+   
+}
+
+.header-text{
+	margin: 5px 0 0 13px;
+    color: white;
+	font-family: Constantia;
+	font-size: 18px;
+	font-weight: 700;	
+	position:absolute;
+}
+
+
+.location-modal-inputblock
+{
+	margin: 0 0 0 22px;
+	
+}
+
+.location-modal-label {
+	width: 164px;
+	margin: 19px 0 0 0;
+	padding: 6px 0 0 0;
+	height: 11px;
+	color: #736B6B;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	float:left;
+}
+
+.location-modal-input {
+	width: 264px;
+	height: 30px;
+	margin: 19px 0 0 31px;
+	padding: 0 0 0 5px;
+	background-color: #E5E5E5;
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 600;
+	border:none;
+	float:left;
+}
+
+.location-modal-button{
+	width: 122px;
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #007894 0%, #003B62 100%);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.58);
+	color: white;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	display:block;
+	border:none;
+}
+
+.button-save{
+ 
+    float:left;
+}
+
+.button-cancel{
+   
+   float:right;   
+}
+
+
+.location-modal-control
+{
+   height:50px;
+   margin: 65px 0 0 0;
+   padding: 0 10px 0 10px;
+}
+
+.location-success {
+	height: 30px;
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: 600;
+    font-size: 12px;
+	background-color: #8fcd55;
+    color: whitesmoke;
+}
+
+.location-fail{
+	height: 30px;
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: 600;
+    font-size: 12px;
+	background-color: #ce4242;
+    color: whitesmoke;
+}

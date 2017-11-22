@@ -1,0 +1,15 @@
+﻿@using MetroSupport.Helpers
+<div class="main-request-menu-delimiter"></div>
+<div class="main-request-menu-subheader pa-subheader-color">Открытые заявки</div>
+@Html.MenuLink("Все", "PaOpenCallRequests", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате", "PaOpenCallRequestsByDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По ответственному и дате", "PaOpenCallRequestsByBossAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По исполнителю и дате", "PaOpenCallRequestsByAssignerAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+<div class="main-request-menu-subheader pa-subheader-color">Все заявки</div>
+@Html.MenuLink("Все", "PaAllCallRequests", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате", "PaAllCallRequestsByDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По дате обработки", "PaAllCallRequestsByDateInProduce", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По статусу", "PaAllCallRequestsByStatus", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По ответственному и дате", "PaAllCallRequestsByBossAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+@Html.MenuLink("По исполнителю и дате", "PaAllCallRequestsByAssignerAndDate", "CentralCallRequestList", "main-request-menu-point", "main-request-menu-point-selected")
+<div class="main-request-menu-delimiter"></div>

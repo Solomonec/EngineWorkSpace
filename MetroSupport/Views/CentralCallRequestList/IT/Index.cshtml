@@ -1,0 +1,56 @@
+﻿@using Omu.Awem
+@using Omu.Awem.Helpers
+@using Omu.AwesomeMvc
+@{
+    Layout = "~/Views/CentralCallRequestList/_CentralCallRequestListLayout.cshtml";
+}
+
+@Html.Partial("ControlPanels/ItControlPanelPartial")
+
+<div style="clear: both"></div>
+<div style="margin: 20px 10px 10px 10px;">
+
+  
+
+
+    @(Html.Awe().Grid("ItCallRequestsGrid")
+     .Columns(new[]{
+           new Column
+                {   Bind = "CallRequestId",
+                    Width = 50,
+                    ClientFormat = "<input type='checkbox' name='CallRequestId' value='.CallRequestId'/>",
+                    Header = "<input type='checkbox' name='chkAll' />"
+                },
+          new Column{Bind = "Creation", ClientFormat=".CreationDate", Header="Дата",Width = 100},
+          new Column{Bind = "Creation", ClientFormat=".CreationTime", Header="Время",Width = 100},
+          new Column{Bind = "RequestNumber", Header = "№ заявки",Width = 100},
+          new Column{Bind = "Status", ClientFormat = ".RequestStatus", Header = "Статус",Width = 150},
+          new Column{Bind = "RequestorName", Header = "Заявитель", Width = 150},
+          new Column{Bind = "AssignBoss" , Header = "Ответственный",Width = 150},
+          new Column{Bind = "AssignTo" , Header = "Исполнитель", Width = 150},
+          new Column{Bind = "Category", Header = "Категория", Width =250},
+          new Column{Bind = "TroubleSubject", Header = "Содержание",Width =250},
+          new Column{Bind = "Comment", ClientFormatFunc = "formatComment", Header = "Комментарий",Width = 300},
+            new Column
+                {   Bind = "CallRequestId",
+                    Width=80,
+                    ClientFormat = "<a href=\"/ItCallRequest/Index?Id=.CallRequestId\" class=\"awe-btn-link\" target=\"_blank\"><span class=\"editicon\"><span></a>",
+                    Header = " "
+
+                },
+      })
+      .PageSize(80)
+      .Mod(o => o.PageInfo())
+      .Sortable(false)
+      .ShowGroupBar(false)
+      .Groupable(false)
+      .ShowGroupedColumn(false))
+
+    @Html.Partial("Modals/ItAdvanceSearchModalPartial")
+    @Html.Partial("Modals/ItReportModalPartial")
+    @Styles.Render("~/Content/ItServices")
+     <link href="@Url.Content("~/Content/ItGridTheme/bui/AwesomeMvc.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/ItGridTheme/bui/awem.css")" rel="stylesheet" type="text/css" />
+   
+    @Scripts.Render("~/bundles/ItRequestList")
+</div>

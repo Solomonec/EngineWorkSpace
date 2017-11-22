@@ -1,0 +1,38 @@
+﻿@model MetroSupport.Models.AssignBoss
+<div id="modalboss" style="display: none">
+    
+    @using (Html.BeginForm("CreateBoss", "Bosses", FormMethod.Post, new { id = "bossform" }))
+   {
+    <div class="boss-modal-background">
+        <div class="boss-modal-header">
+            <div class="header-text">Ответственный</div>
+        </div>
+        <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+        </div>
+        @Html.HiddenFor(model => model.BossId, new { id = "bossid" })
+            <div class="boss-modal-inputblock">
+                <div class="boss-modal-label">Имя ответственного</div> @Html.TextBoxFor(model => model.BossName, new { @class = "boss-modal-input", id = "bossname" }) @Html.ValidationMessageFor(x => x.BossName)
+            </div>
+            <div class="boss-modal-inputblock">
+                <div class="boss-modal-label">Должность</div> @Html.TextBoxFor(model => model.Organization, new { @class = "boss-modal-input", id = "job" }) @Html.ValidationMessageFor(x => x.Organization)
+            </div>
+            <div class="boss-modal-inputblock">
+                <div class="boss-modal-label">Отдел</div> <div class="boss-select"> @Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            }, "Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department)
+                                                                                        </div> 
+            </div>
+            <div style="clear: both"></div>
+            <div class="boss-modal-control">
+                <button type="submit" class="boss-modal-button button-save">Сохранить</button>
+                <button type="submit" class="boss-modal-button button-cancel">Отменить</button>
+            </div>
+        
+        </div>
+    }
+</div>

@@ -1,0 +1,58 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.BossViewModel
+@{
+    ViewBag.Title = "PA";
+    Layout = "~/Areas/Administration/Views/Bosses/_BossesLayout.cshtml";
+    
+}
+
+<button id="addboss" class="adm-user-newperson-button adm-color-pa">Добавить ответственного</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-pa">
+                <td>Ответственный</td>
+                <td>Должность</td>
+                <td width="40px"></td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var boss in Model.Bosses)
+                {
+                    <tr>
+                        <td>@boss.BossName</td>
+                        <td>@boss.Organization</td>
+                        <td><span class="editico" data-bossid="@boss.BossId"></span></td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveBoss", new { bossid = @boss.BossId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+
+                    </tr>
+
+
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height:45px">
+        @Html.Pager(Model.Bosses.PageSize, Model.Bosses.PageNumber, Model.Bosses.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+
+@Html.Partial("Modals/BossModalPartial", Model.Boss)

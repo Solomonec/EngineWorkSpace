@@ -1,0 +1,12 @@
+﻿<button id="newrequest" class="button-control-style aspp-button-color">Новая заявка</button>
+@if (User.IsInRole("Administrator"))
+{
+    <button id="deleterequest" class="button-control-style aspp-button-color">Удалить</button>
+}
+<button id="report" class="button-control-style aspp-button-color">Отчет</button>
+@using (Html.BeginForm("AsppSimpleSearch", "CentralCallRequestList", FormMethod.Post, new { id = "simplesearchform", style = "float: right; display: block" }))
+{
+    <button id="search" type="submit" class="button-search aspp-button-color">Найти</button>
+    <button id="advsearch" type="button" class="button-search-add">+</button>
+    @Html.TextBox("searchvalue", "", new { @class = "input-search-string", @placeholder = "Введите фразу..." })
+}

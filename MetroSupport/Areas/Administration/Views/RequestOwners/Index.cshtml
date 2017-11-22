@@ -1,0 +1,77 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.RequestOwnerViewModel
+@{
+    ViewBag.Title = "Svyaz";
+    Layout = "~/Areas/Administration/Views/RequestOwners/_RequestOwnersLayout.cshtml";
+    const string alfabetic = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+
+<button id="addrequestor" class="adm-user-newperson-button adm-color-default">Добавить заявителя</button>
+
+<div class="adm-user-verb-panel">
+    @foreach (char t in alfabetic)
+    {
+        @Html.ActionLink(t.ToString(), "Index", new { literal = t }, new { @class = "adm-user-verb adm-color-default" })
+    }
+</div>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+        <tr class="adm-user-table-header adm-color-default">
+            <td>Имя заявителя</td>
+            <td>Должность</td>
+            <td>Служба</td>
+            <td>Отдел</td>
+            <td>Кабинет</td>
+            <td>Тел</td>
+            <td width="40px"></td>
+            <td width="40px"></td>
+
+        </tr>
+        </thead>
+        <tbody>
+ @if (Model != null)
+        {
+            foreach (var requestor in Model.RequestOwners)
+            {
+                <tr>
+                    <td>@requestor.RequestorAltName</td>
+                    <td>@requestor.Job</td>
+                    <td>@requestor.Organization</td>
+                    <td>@requestor.Department</td>
+                    <td>@requestor.Room</td>
+                    <td>@requestor.Tel</td>
+                    <td><span class="editico" data-requestorid="@requestor.RequestorId"></span></td>
+                    <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveRequestOwner", new { requestorid = @requestor.RequestorId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+              </tr>
+
+
+            }
+
+        }
+        else
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+
+@if (Model != null)
+{
+<div style="height: 45px;">
+    @Html.Pager(Model.RequestOwners.PageSize, Model.RequestOwners.PageNumber, Model.RequestOwners.TotalItemCount).Options(o => o.RouteValues(new{literal=ViewBag.Literal}).DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+</div>
+    @Html.Partial("Modals/RequestorModalPartial", Model.RequestOwner)
+}

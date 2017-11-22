@@ -1,0 +1,351 @@
+﻿@charset "utf-8";
+
+html{
+   background:#fff url("img/Background.png") no-repeat center center fixed;
+    -moz-background-size:cover; 
+   -o-background-size:102% auto;
+   -webkit-background-size:102% auto; 
+   -khtml-background-size:cover; 
+   background-size:cover;
+}
+
+body{
+	
+	margin:0;
+	padding:0;
+	position:relative;
+	
+	}
+
+
+
+.user-section-box, .user-section-link-box
+{
+    margin: 12px 10px 0 10px;
+    
+    height: 35px;
+    float: left;
+}
+
+.user-section-link-box {
+    margin: 10px 10px 0 10px;
+  
+}
+
+.user-border-separator {
+    margin: 4px 0 0 0;
+    width:3px;
+    height: 35px;
+    float: left;
+    
+}
+
+.delimmit-light
+{
+    background-image:  linear-gradient(180deg, #00728F 0%, #00728F 100%, #00728F 100%);
+}
+
+.delimmit-dark
+{
+    background-image:  linear-gradient(180deg, #0E567B 0%, #0E567B 100%, #0E567B 100%);
+}
+
+
+/* Style for "Аватар" */
+.user-avatar {
+    margin: 3px 0 0 4px;
+    width: 35px;
+    height: 36px;
+    background-image: url(img/avatar.png);
+    display: block;
+    float: left;
+}
+
+.user-text {
+    text-shadow: 0 4px 3.8px rgba(0, 0, 0, 0.35);
+    color: white;
+    font-family: Constantia;
+    font-size: 14px;
+    font-weight: 700;
+      text-decoration: none;
+    cursor: pointer;
+}
+
+.user-text:hover {
+    color: yellow;
+}
+
+.auth-head-panel {
+	
+	height: 44px;
+	background-color: #469eec;
+	background-image: linear-gradient(180deg, #007894 0%, #003B62 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+
+.logo {
+	width: 293px;
+	height: 93px;
+	margin: 22px 0 129px 35px;
+	background: url("img/Logo.png") no-repeat
+}
+
+
+
+
+.reg-user-wraper {
+	
+	margin:0 0 35px 0;
+	padding:0;
+	border-radius: 12px;
+	border: 10px solid rgba(0, 0, 0, .4);
+	
+}
+
+.reg-user-background {
+	
+	margin:0px;
+	padding:0px;
+	background: url("img/reguser_background.png");
+
+		
+}
+
+.reg-user-header {
+   
+   	height: 49px;
+	background-color: #b1b1b1;
+	margin:0;
+
+}
+
+.reg-user-header-text{
+	margin: 10px 0 0 8px;
+	text-shadow: 0 3px 5px rgba(0, 0, 0, 0.35);
+	color: #494949;
+	font-family: Arial;
+	font-size: 24px;
+	font-weight: 700;
+    position:absolute;	
+}
+
+.reg-user-subheader-panel {
+	margin:0;
+	padding:0;
+	height: 31px;
+	background-color: #04243c;
+    background-image: linear-gradient(180deg, #007894 0%, #003B62 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+.reg-user-subheader-text{
+   
+    color: #E5E5E5;
+	margin: 4px 0 0 15px;
+	font-family: Arial;
+	font-size: 18px;
+	font-weight: 700;
+	position:absolute;
+	
+}
+
+.reg-user-inputblock{
+   margin: 23px 0 0 39px;
+   
+}
+
+
+.reg-user-changepassword-block{
+   margin: 36px 0 36px 39px;
+   
+}
+
+.reg-user-correction
+{
+   margin: 0 0 17px 0;
+   
+}
+
+
+.reg-user-chkbox-correction-active
+{
+	margin: 55px 0 17px 0;
+    float: right;
+}
+
+.reg-user-lable{
+	width:150px;
+	padding:10px 30px 0 0;
+	text-shadow: 0 0 8px rgba(255, 255, 255, 0.90),
+	             0 0 10px rgba(255, 255, 255, 0.90),
+				 0 0 12px rgba(255, 255, 255, 0.90),
+				 0 0 14px rgba(255, 255, 255, 0.90);
+	color: #6B6B6A;
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: 700;
+	float:left;
+	
+}
+
+.reg-user-input{
+    width: 242px;
+	height: 33px;
+	background-color: #D4D4D4;
+	box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.3);
+	border:none;
+}
+
+
+.reg-user-select{
+	width: 245px;
+	height: 34px;
+    background: #D4D4D4 url(img/arrow_custom.png) no-repeat 224px 0px;
+	box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.3);
+	border: none;
+	overflow:hidden;
+    float:left;
+}
+
+.reg-user-select select{
+    width: 264px;
+    height:34px;
+	font-family: Constantia;
+	background: transparent;
+    background: rgba(43,43,42,0);
+    -webkit-appearance: none;
+	border:0;
+    outline:0; 
+}
+
+.reg-user-select select option{
+	 background-color: #D4D4D4;
+   
+}
+
+.reg-user-footer
+{
+	height: 64px;
+	background-color: #04243c;
+	background-image: linear-gradient(180deg, #C1C1C1 0%, #797878 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+	clear:both;
+}
+
+.register-button, .change-password-button
+{
+	width: 172px;
+	height: 42px;
+	margin: 11px 0 0 13px;
+	background-color: #cfcfcf;
+	background-image: linear-gradient(180deg, #FCFCFC 0%, #FCFCFC 10%, #D3D3D3 90%);
+	border-radius: 10px;
+	border: none;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+	color: #6B6B6A;
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+
+.change-password-button {
+    width: 152px;
+    height: 35px;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.65);
+    font-size: 12px;
+    margin: 0 0 0 15px;
+}
+
+
+div#showactive {
+    padding: 0;
+    width: 135px;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.90),
+	             0 0 10px rgba(255, 255, 255, 0.90),
+				 0 0 12px rgba(255, 255, 255, 0.90),
+				 0 0 14px rgba(255, 255, 255, 0.90);
+    font-family: Arial;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+div#show {
+    width:835px;
+	height: 121px;
+    padding:10px;
+	text-shadow: 0 0 8px rgba(255, 255, 255, 0.90),
+	             0 0 10px rgba(255, 255, 255, 0.90),
+				 0 0 12px rgba(255, 255, 255, 0.90),
+				 0 0 14px rgba(255, 255, 255, 0.90);
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: 700;
+    
+}
+
+input[type="checkbox"] {
+    display:none;
+}
+
+
+input[type="checkbox"] + input[type="hidden"] + label {
+    color: #6B6B6A;
+	margin: 0 0 0 25px;
+	font-family:Arial, sans-serif;
+    font-size:14px;
+	cursor:pointer;
+    
+}
+
+input[type="checkbox"] + input[type="hidden"] + label{
+    display:inline-block;
+    width:100px;
+    height:26px;
+    padding: 5px 0 0 29px;
+    margin: -1px 4px 0 0;
+    vertical-align:middle;
+    background:url(img/checkbox_unchecked.png) left top no-repeat;
+    cursor:pointer;
+    display: block;
+    float: left;
+}
+
+input[type="checkbox"]:checked + input[type="hidden"] + label{
+    background:url(img/checkbox_checked.png) left top no-repeat;
+}
+
+.checkbox-lable {
+    margin: 0 30px 0 0;
+    float: left;
+}
+
+.checkbox-position{
+	margin: 13px 0 0 0;
+	float: left;
+}
+
+.field-validation-error {
+    color: #b94a48;
+}
+ 
+.field-validation-valid {
+    display: none;
+}
+ 
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+ 
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+ 
+.validation-summary-errors {
+    color: #b94a48;
+}
+ 
+.validation-summary-valid {
+    display: none;
+}

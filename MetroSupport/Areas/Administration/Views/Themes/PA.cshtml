@@ -1,0 +1,48 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.ThemeViewModel
+@{
+    ViewBag.Title = "Темы заявок";
+    Layout = "~/Areas/Administration/Views/Themes/_ThemesLayout.cshtml";
+}
+
+
+<button id="addtheme" class="adm-user-newperson-button adm-color-pa">Добавить тему</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+            <tr class="adm-user-table-header adm-color-pa">
+                <td>Тема проблемы</td>
+                <td width="40px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.TroubleSubjects != null)
+            {
+                foreach (var theme in Model.TroubleSubjects)
+                {
+                    <tr>
+                        <td>@theme.SubjectName</td>
+                        <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveTheme", new { themeid = @theme.SubjectId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+                   </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@if (Model.TroubleSubjects != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.TroubleSubjects.PageSize, Model.TroubleSubjects.PageNumber, Model.TroubleSubjects.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+@Html.Partial("Modals/ThemeModalPartial", Model.TroubleSubject)

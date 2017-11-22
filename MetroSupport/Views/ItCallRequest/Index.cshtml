@@ -1,0 +1,613 @@
+﻿@model MetroSupport.ViewModels.ItRequest_LogViewModel
+@using MetroSupport.Commons
+@{
+    Layout = null;
+    
+}
+
+<!doctype html>
+<html ng-app="ItRequestApp">
+<head>
+    <meta charset="utf-8">
+    <title>@Model.ItRequest.RequestNumber - @Model.ItRequest.TroubleSubject</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/ItRequest")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquerymodal")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/itrequest")
+
+
+</head>
+<body>
+    <div class="header-panel" ng-controller="ButtonsControlCtrl">
+        <ul style="margin: 0; padding: 0; list-style-image: none;">
+            @if (Model.ItRequest.Status == 0)
+            {
+                if (User.IsInRole("ItBoss") || User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="saverequest()">Назначить и уведомить</a></li>
+                }
+            }
+            @if (Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4)
+            {
+                if (User.IsInRole("ItWork") || User.IsInRole("ItBoss"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignTo || Model.User.FullName == Model.ItRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                    }
+                }
+                if (User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                }
+            }
+            @if (Model.ItRequest.Status == 5 & Model.ItRequest.IsWorkingOn == 0)
+            {
+                if (User.IsInRole("ItWork"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
+                    }
+                }
+            }
+            @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("ItWork"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
+                    }
+                }
+
+            }
+            @if (Model.ItRequest.Status == 9)
+            {
+                if (User.IsInRole("ItBoss"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
+                    }
+                }
+            }
+            @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("ItWork"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-lgsize"})</li>
+                    }
+                }
+            }
+            @if (Model.ItRequest.Status == 9)
+            {
+                if (User.IsInRole("ItBoss"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
+                    }
+                }
+            }
+            @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("ItWork") || User.IsInRole("ItBoss"))
+                {
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss || Model.User.FullName == Model.ItRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="opendenyrequest()">Отклонить</a></li>
+                    }
+                }
+            }
+        </ul>
+        @Html.Partial("_LoginPartial", Model.User)
+    </div>
+    <div class="request-header-box">
+
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">№ заявки: </span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Model.ItRequest.RequestNumber</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-lgfont request-header-item-lgsize request-header-item-name-color">Проблема: </span> <span class="request-header-item-lgfont request-header-item-lgsize-def request-header-item-content-color">@Theme.ThemePrimaryDefault(Model.ItRequest.TroubleSubject)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color ">Дата:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color"> @Dates.DateNullConversion(Model.ItRequest.Creation) @Dates.TimeNullConversion(Model.ItRequest.Time)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">Статус:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Status.StatusConvertion(Model.ItRequest.Status, Model.ItRequest.IsWorkingOn)</span>
+        <div class="request-header-clear">  </div>
+    </div>
+
+    <div class="tab-link-zone">
+        <ul id="tabs">
+            <li><a href="#" name="tab1">Заявка</a></li>
+            <li><a href="#" name="tab2">Работа</a></li>
+            <li><a href="#" name="tab3">История</a></li>
+        </ul>
+    </div>
+<div id="content">
+@using (Html.BeginForm("CreateAndSave", "ItCallRequest", FormMethod.Post, new {id = "itcallrequestform"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.ItRequest.CallRequestId)
+    <div id="tab1" style="min-width: 1445px">
+    <div class="request-subject-box" ng-controller="TroubleSubjectCtrl">
+        <div class="request-subject-name">Тема заявки:</div> @Html.TextBoxFor(x => x.ItRequest.TroubleSubject, new {@class = "request-subject-input", ng_model = "theme.themename", @ng_init = "theme.themename ='" + Model.ItRequest.TroubleSubject + "'", @readonly = "readonly"}) <input type="button" ng-click="openthemedialog()" class="request-subject-button" value="..."/>
+        <div id="modalthemes" style="display: none">
+            <div class="it-themes-background">
+                <div class="it-themes-header">
+                    <div class="it-themes-header-text">Выбирите тему</div>
+                </div>
+                <div class="it-themes-container">
+                    <div class="it-themes-box">
+
+                    </div>
+               
+                </div>
+                <div style="clear: both"> </div>
+                <div class="it-themes-control">
+                    <button type="button" class="it-themes-button button-ok" ng-click="themeacception()">Принять</button>
+                    <button type="button" class="it-themes-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="request-comment-box">
+        <div class="request-comment-name">Комментарий:</div> @Html.TextAreaFor(x => x.ItRequest.Comment, new {@class = "request-comment-input"})
+    </div>
+
+    <div class="request-infobox-lg" ng-controller="DeviceInfoCtrl">
+        <div class="request-infobox-header">
+            <div class="request-infobox-text">Оборудование заявителя</div>
+        </div>
+        <div class="request-infobox-lg-context">
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Инв. №</div> @Html.TextBoxFor(x => x.ItRequest.InvNumber, new {@class = "request-infobox-context-inv", ng_model = "device.invnumber", @ng_init = "device.invnumber ='" + Model.ItRequest.InvNumber + "'"}) <input type="button" id="adddevice" ng-click="opendialog()" class="request-infobox-context-button" value="..."/>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Устройство</div> @Html.TextBoxFor(x => x.ItRequest.DeviceName, new {@class = "request-infobox-context-input", ng_model = "device.devicename", @ng_init = "device.devicename ='" + Model.ItRequest.DeviceName + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Серийный номер</div> @Html.TextBoxFor(x => x.ItRequest.SerialNumber, new {@class = "request-infobox-context-input", ng_model = "device.serialnumber", @ng_init = "device.serialnumber ='" + Model.ItRequest.SerialNumber + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Класс</div> @Html.TextBoxFor(x => x.ItRequest.DeviceClass, new {@class = "request-infobox-context-input", ng_model = "device.deviceclass", @ng_init = "device.deviceclass ='" + Model.ItRequest.DeviceClass + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Тип</div> @Html.TextBoxFor(x => x.ItRequest.DeviceType, new {@class = "request-infobox-context-input", ng_model = "device.devicetype", @ng_init = "device.devicetype ='" + Model.ItRequest.DeviceType + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Модель</div> @Html.TextBoxFor(x => x.ItRequest.DeviceModel, new {@class = "request-infobox-context-input", ng_model = "device.devicemodel", @ng_init = "device.devicemodel ='" + Model.ItRequest.DeviceModel + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Ввод в эксп.</div> @Html.TextBoxFor(x => x.ItRequest.DateInWork, "dd.mm.yyyy", new {@class = "request-infobox-context-input", ng_model = "device.dateinwork", @ng_init = "device.dateinwork ='" + Model.ItRequest.DateInWork + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+            </div>
+            <div class="request-infobox-context-container">
+            </div>
+
+        </div>
+    </div>
+    <div class="request-infobox-lg">
+        <div class="request-infobox-header">
+            <div class="request-infobox-text">Описание проблемы</div>
+        </div>
+        <div class="request-infobox-lg-context" ng-controller="CategoriesCtrl">
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Направление</div> @Html.TextBoxFor(x => x.ItRequest.TroubleDepartment, new { @class = "request-infobox-context-inv", ng_model = "category.troubledepartment", @readonly = "readonly" }) 
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Категория</div> @Html.TextBoxFor(x => x.ItRequest.Category, new {@class = "request-infobox-context-input", ng_model = "category.categoryname", @ng_init = "category.categoryname ='" + Model.ItRequest.Category + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId, new {ng_model = "category.nextsubcategory0", @ng_init = "category.nextsubcategory0 ='" + Model.ItRequest.NextSubCategoryId + "'", id = "nextsubcategory0", style = "display: none"}) <input type="button" class="request-infobox-context-button" data-number="0" ng-click="opencategoriesdialog($event)" value="..."/>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подкатегория1</div> @Html.TextBoxFor(x => x.ItRequest.SubCategory1, new {@class = "request-infobox-context-input", ng_model = "category.subcategory1", @ng_init = "category.subcategory1 ='" + Model.ItRequest.SubCategory1 + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId1, new {ng_model = "category.nextsubcategory1", @ng_init = "category.nextsubcategory1 ='" + Model.ItRequest.NextSubCategoryId1 + "'", id = "nextsubcategory1", style = "display: none"})<div ng-show="category.btncategory1"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="1" value="..."/>
+                </div>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подкатегория2</div> @Html.TextBoxFor(x => x.ItRequest.SubCategory2, new {@class = "request-infobox-context-input", ng_model = "category.subcategory2", @ng_init = "category.subcategory2 ='" + Model.ItRequest.SubCategory2 + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId2, new {ng_model = "category.nextsubcategory2", @ng_init = "category.nextsubcategory2 ='" + Model.ItRequest.NextSubCategoryId2 + "'", id = "nextsubcategory2", style = "display: none"})
+                <div ng-show="category.btncategory2"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="2" value="..."/>
+                </div>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подкатегория3</div> @Html.TextBoxFor(x => x.ItRequest.SubCategory3, new {@class = "request-infobox-context-input", ng_model = "category.subcategory3", @ng_init = "category.subcategory3 ='" + Model.ItRequest.SubCategory3 + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId3, new {ng_model = "category.nextsubcategory3", @ng_init = "category.nextsubcategory3 ='" + Model.ItRequest.NextSubCategoryId3 + "'", id = "nextsubcategory3", style = "display: none"})
+                <div ng-show="category.btncategory3"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="3" value="..."/>
+                </div>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подкатегория4</div> @Html.TextBoxFor(x => x.ItRequest.SubCategory4, new {@class = "request-infobox-context-input", ng_model = "category.subcategory4", @ng_init = "category.subcategory4 ='" + Model.ItRequest.SubCategory4 + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId4, new {ng_model = "category.nextsubcategory4", @ng_init = "category.nextsubcategory4 ='" + Model.ItRequest.NextSubCategoryId4 + "'", id = "nextsubcategory4", style = "display: none"})<div ng-show="category.btncategory4"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="4" value="..."/>
+                </div>
+            </div>
+
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подкатегория5</div> @Html.TextBoxFor(x => x.ItRequest.SubCategory5, new {@class = "request-infobox-context-input", ng_model = "category.subcategory5", @ng_init = "category.subcategory5 ='" + Model.ItRequest.SubCategory5 + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.NextSubCategoryId5, new {ng_model = "category.nextsubcategory5", @ng_init = "category.nextsubcategory5 ='" + Model.ItRequest.NextSubCategoryId5 + "'", id = "nextsubcategory5", style = "display: none"})
+                <div ng-show="category.btncategory5"><input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="5" value="..."/>
+                </div>
+            </div>
+            <div class="request-infobox-context-container"> </div>
+            <div class="request-infobox-context-container" ng-show="category.modelcontainer">
+                <div class="request-infobox-context-name">Модель</div> @Html.TextBoxFor(x => x.ItRequest.Model, new {@class = "request-infobox-context-input", ng_model = "category.model", @ng_init = "category.model ='" + Model.ItRequest.Model + "'", @readonly = "readonly"}) @Html.TextBoxFor(x => x.ItRequest.ModelId, new {ng_model = "category.modelid", @ng_init = "category.modelid ='" + Model.ItRequest.ModelId + "'", id = "modelid", style = "display: none"}) <input type="button" class="request-infobox-context-button" ng-click="opendevicemodelsdialog()" value="..." />
+            </div>
+            <div id="modalcategories" style="display: none">
+                <div class="it-categories-background">
+                    <div class="it-categories-header">
+                        <div class="it-categories-header-text">Выбирите категорию</div>
+                    </div>
+                    <div class="it-categories-container">
+                        <div class="it-categories-box">
+
+                        </div>
+                    </div>
+                    <div style="clear: both"> </div>
+                    <div class="it-categories-control">
+                        <button type="button" class="it-categories-button button-ok" ng-click="categoryacception()">ОК</button>
+                        <button type="button" class="it-categories-button button-cancel" >Отмена</button>
+                    </div>
+                </div>
+            </div>
+            <div id="modaldevicemodels" style="display: none">
+                <div class="it-devicemodels-background">
+                    <div class="it-devicemodels-header">
+                        <div class="it-devicemodels-header-text">Выбирите модель устройства</div>
+                    </div>
+                    <div class="it-devicemodels-container">
+                        <div class="it-devicemodels-box">
+
+                        </div>
+                    </div>
+                    <div style="clear: both"> </div>
+                    <div class="it-devicemodels-control">
+                        <button type="button" class="it-devicemodels-button button-ok" ng-click="devicemodelacception()">ОК</button>
+                        <button type="button" class="it-devicemodels-button button-cancel">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="request-header-clear"></div>
+    <div class="request-infobox-sm" ng-controller="RequestorCtrl">
+        <div class="request-infobox-header">
+            <div class="request-infobox-text">Заявитель</div>
+        </div>
+        <div class="request-infobox-sm-context">
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">ФИО</div> @Html.TextBoxFor(x => x.ItRequest.RequestorName, new {@class = "request-infobox-context-input", ng_model = "requestor.requestorname", @ng_init = "requestor.requestorname ='" + Model.ItRequest.RequestorName + "'", @readonly = "readonly"}) <input type="button" ng-click="openrequestordialog()" class="request-infobox-context-button" value="..."/>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Подразделение</div> @Html.TextBoxFor(x => x.ItRequest.Organization, new {@class = "request-infobox-context-input", ng_model = "requestor.department", @ng_init = "requestor.department ='" + Model.ItRequest.Organization + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.ItRequest.Department, new {@class = "request-infobox-context-input", ng_model = "requestor.subdepartment", @ng_init = "requestor.subdepartment ='" + Model.ItRequest.Department + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Тел.</div> @Html.TextBoxFor(x => x.ItRequest.Tel, new {@class = "request-infobox-context-input", ng_model = "requestor.tel", @ng_init = "requestor.tel ='" + Model.ItRequest.Tel + "'", @readonly = "readonly"})
+            </div>
+
+
+        </div>
+    </div>
+    <div class="request-infobox-sm">
+        <div class="request-infobox-header" ng-controller="RequestorCtrl">
+            <div class="request-infobox-text">Место нахождения</div>
+        </div>
+        <div class="request-infobox-sm-context">
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Адрес</div> @Html.TextBoxFor(x => x.ItRequest.Address, new {@class = "request-infobox-context-input", ng_model = "requestor.address", @ng_init = "requestor.address ='" + Model.ItRequest.Address + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Комната</div> @Html.TextBoxFor(x => x.ItRequest.Room, new {@class = "request-infobox-context-input", ng_model = "requestor.room", @ng_init = "requestor.room ='" + Model.ItRequest.Room + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Этаж</div> @Html.TextBoxFor(x => x.ItRequest.Floor, new {@class = "request-infobox-context-input", ng_model = "requestor.floor", @ng_init = "requestor.floor ='" + Model.ItRequest.Floor + "'", @readonly = "readonly"})
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Площадка</div>
+                <div class="request-infobox-context-select"> @Html.DropDownListFor(x => x.ItRequest.Location, Model.Location, new { @readonly = "readonly" })</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="request-header-clear"> </div>
+    <div class="request-infobox-sm">
+
+    </div>
+    <div class="request-infobox-sm">
+        <div class="request-infobox-header">
+            <div class="request-infobox-text">Исполнитель</div>
+        </div>
+        <div class="request-infobox-sm-context" ng-controller="AssignerCtrl">
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Исполнитель</div> @Html.TextBoxFor(x => x.ItRequest.AssignTo, new { @class = "request-infobox-context-input", ng_model = "assigner.assignername", @ng_init = "assigner.assignername ='" + Model.ItRequest.AssignTo + "'", @readonly = "readonly" }) <input type="button" class="request-infobox-context-button" ng-click="openassignerdialog()" value="..."/>
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Ответственный</div>@Html.TextBoxFor(x => x.ItRequest.AssignBoss, new { @class = "request-infobox-context-input", ng_model = "assigner.bossname", @ng_init = "assigner.bossname ='" + Model.ItRequest.AssignBoss + "'", @readonly = "readonly" })
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Сектор</div> @Html.TextBoxFor(x => x.ItRequest.AssignSubDepartment, new { @class = "request-infobox-context-input", ng_model = "assigner.subdepartment", @ng_init = "assigner.subdepartment ='" + Model.ItRequest.AssignSubDepartment + "'", @readonly = "readonly" })
+            </div>
+            <div class="request-infobox-context-container">
+                <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.ItRequest.AssignDepartment, new { @class = "request-infobox-context-input", ng_model = "assigner.department", @ng_init = "assigner.department ='" + Model.ItRequest.AssignDepartment + "'", @readonly = "readonly" })
+            </div>
+
+            <div id="modalassigners" style="display: none">
+                <div class="it-assigner-background">
+                    <div class="it-assigner-header">
+                        <div class="it-assigner-header-text">Выбирите исполнителя</div>
+                    </div>
+                    <div class="it-assigner-container">
+                        <div style="float: left">
+                            <div class="it-assigner-head-note">
+                                Подразделение
+                            </div>
+                            <div class="it-assigner-department-box">
+                                
+                            </div>
+                        </div>
+
+                        <div style="margin: 0 0 0 20px; float: left">
+                            <div class="it-assigner-head-note">
+                                Исполнители
+                            </div>
+                            <div class="it-assigner-box">
+                              
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both"> </div>
+                    <div class="it-assigner-control">
+                        <button type="button" class="it-assigner-button button-ok" ng-click="assigneracception()">Принять</button>
+                        <button type="button" class="it-assigner-button button-cancel" >Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    <div id="tab2" style="min-width: 1445px">
+        <div class="request-work-sm">
+            <div class="request-work-header">
+                <div class="request-work-text">Время выполнения работы</div>
+            </div>
+            <div class="request-work-sm-context">
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.ItRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.ItRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.ItRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.ItRequest.StartTimeInWork), id = "starttimepicker" })
+                    <input type="button" class="request-work-context-button" value="..." />
+                </div>
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.ItRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.ItRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.ItRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.ItRequest.EndTimeInWork), id = "endtimepicker" })
+                    <input type="button" class="request-work-context-button" value="..." />
+                </div>
+                <div class="request-work-context-container">
+                </div>
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Затрачено</div> @Html.TextBoxFor(x => x.ItRequest.TotalWorkInDays, new { @class = "request-work-context-total", @readonly = "readonly", id = "totaldays" })
+                    <div class="request-work-context-total-lable"> дн. </div> @Html.TextBoxFor(x => x.ItRequest.TotalWorkInHours, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalhours" })
+                    <div class="request-work-context-total-lable">час.</div>@Html.TextBoxFor(x => x.ItRequest.TotalWorkInMinutes, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalminutes" })
+                    <div class="request-work-context-total-lable">мин.</div>
+                </div>
+
+            </div>
+        </div>
+        <div style="clear: both"></div>
+        <div class="request-work-sm">
+            <div class="request-work-header">
+                <div class="request-work-text">Параметры работы</div>
+            </div>
+            <div class="request-work-sm-context">
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Причина неполадки</div>
+                    <div class="request-work-context-select">
+                        @Html.DropDownListFor(x => x.ItRequest.TroubleReason, new List<SelectListItem>
+                        {
+                            new SelectListItem {Value = "0", Text = ""},
+                            new SelectListItem {Value = "1", Text = "Другое"},
+                            new SelectListItem {Value = "2", Text = "Отказ оборудования"},
+                            new SelectListItem {Value = "3", Text = "Ошибка пользователя"},
+                            new SelectListItem {Value = "4", Text = "Программная ошибка"}
+
+                        },
+                            new { @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Профилактика</div>
+                    <div class="request-work-context-select">
+                        @Html.DropDownListFor(x => x.ItRequest.Prevention, new List<SelectListItem>
+                        {
+                            new SelectListItem {Value = "0", Text = ""},
+                            new SelectListItem {Value = "1", Text = "Выполнялась"},
+                            new SelectListItem {Value = "2", Text = "Не выполнялась"}
+                        },
+                            new { @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="request-work-context-container">
+                    <div class="request-work-context-name">Выполнена удаленно</div>
+                    <div id="show">
+                        <div class="checkbox-position">
+                            @Html.CheckBoxFor(x => x.ItRequest.Remote)
+                            @Html.Label("ItRequest.Remote", " ")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div style="clear: both"></div>
+        <div class="request-work-lg">
+            <div class="request-work-lg-header">
+                <div class="request-work-text">Описание выполненной работы</div>
+            </div>
+            <div class="request-work-lg-context">
+                <div class="request-work-context-lg-container">
+                    <div class="request-work-context-name">Описание проблемы</div> @Html.TextAreaFor(x => x.ItRequest.TroubleDescription, new { @class = "request-work-context-lg-input", id = "troubledescription" })
+                </div>
+                <div class="request-work-context-lg-container">
+                    <div class="request-work-context-name">Решение проблемы</div> @Html.TextAreaFor(x => x.ItRequest.ResolveDescription, new { @class = "request-work-context-lg-input", id = "resolvedescription" })
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+    <div id="tab3" style="min-width: 1445px">
+        <div class="request-history-input-box">
+            <div class="request-history-input-header">
+                <div class="request-history-header-text">Создано</div>
+            </div>
+            <div class="request-history-input">@Model.ItRequestLog.WhoCreate</div>
+            <div class="request-header-clear"></div>
+            <div class="request-history-input-header">
+                <div class="request-history-header-text">Дата и время</div>
+            </div>
+            <div class="request-history-input">@Dates.DateNullConversion(Model.ItRequestLog.ChangeDate) @Dates.TimeNullConversion(Model.ItRequestLog.ChangeDate)</div>
+        </div>
+        <div class="request-history-input-box">
+            <div class="request-history-input-header">
+                <div class="request-history-header-text">Изменено</div>
+            </div>
+            <div class="request-history-input">@Model.ItRequestLog.WhoChange</div>
+            <div class="request-header-clear"> </div>
+            <div class="request-history-input-header">
+                <div class="request-history-header-text">Дата и время</div>
+            </div>
+            <div class="request-history-input">@Dates.DateNullConversion(Model.ItRequestLog.ChangeDate) @Dates.TimeNullConversion(Model.ItRequestLog.ChangeDate)</div>
+        </div>
+        <div class="request-header-clear"> </div>
+        <div class="request-history-log-box">
+            <div class="request-history-log-header">
+                <div class="request-history-header-log-text">Детализация</div>
+            </div>
+            <div class="request-history-log-board">
+                <div class="request-history-log-context">
+                    @if (Model.ItRequestLog.LogTextCollection != null)
+                    {
+                        foreach (string logtext in Model.ItRequestLog.LogTextCollection)
+                        {
+                            @logtext<br>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalholdon" style="display: none">
+    @using (Html.BeginForm("MakeHold", "ItCallRequest", FormMethod.Post, new {id = "holdonform"}))
+    {
+        <div class="it-holdon-background">
+            <div class="it-holdon-header">
+                <div class="it-holdon-header-text">Укажите причину продления заявки</div>
+            </div>
+            @Html.Hidden("requestid", Model.ItRequest.CallRequestId)
+            <div class="it-holdon-container">
+                @Html.TextArea("description", new {@class = "it-holdon-box"})
+            </div>
+            <div style="clear: both"> </div>
+            <div class="it-holdon-control">
+                <button type="submit" class="it-holdon-button button-ok">Продлить</button>
+                <button type="button" class="it-holdon-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="modalreturnto" style="display: none">
+    @using (Html.BeginForm("ReturnToAssigner", "ItCallRequest", FormMethod.Post, new {id = "returntoform"}))
+    {
+        <div class="it-returnto-background">
+            <div class="it-returnto-header">
+                <div class="it-returnto-header-text">Укажите причину возврата заявки</div>
+            </div>
+            @Html.Hidden("requestid", Model.ItRequest.CallRequestId)
+            <div class="it-returnto-container">
+                @Html.TextArea("description", new {@class = "it-returnto-box"})
+            </div>
+            <div style="clear: both"> </div>
+            <div class="it-returnto-control">
+                <button type="submit" class="it-returnto-button button-ok">Вернуть</button>
+                <button type="button" class="it-returnto-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    }
+</div>
+
+    <div id="modaldeny" style="display: none">
+        @using (Html.BeginForm("Deny", "ItCallRequest", FormMethod.Post, new { id = "denyform" }))
+        {
+            <div class="it-returnto-background">
+                <div class="it-returnto-header">
+                    <div class="it-returnto-header-text">Укажите причину возврата заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.ItRequest.CallRequestId)
+                <div class="it-returnto-container">
+                    @Html.TextArea("description", new { @class = "it-returnto-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="it-returnto-control">
+                    <button type="submit" class="it-returnto-button button-ok">Вернуть</button>
+                    <button type="button" class="it-returnto-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+<div id="modaldevices" style="display: none">
+    <div class="it-devices-background" ng-controller="DeviceInfoCtrl">
+        <div class=" it-devices-header">
+            <div class="it-devices-header-text">Выбирите устройство</div>
+        </div>
+        <div class="it-devices-container">
+            <div class="it-devices-search-box">
+                <input type="text" ng-model="searchdevice" class="it-devices-search-input" placeholder="Введите инвентерный новер..."/>
+                <button type="button" ng-click="search()" class="it-devices-search-button">Найти</button>
+            </div>
+            <div class="it-devices-box">
+                <div class="it-devices-item" data-index="0" ng-click="item($event)">
+                    X1234 - Системный блок
+                </div>
+                <div class="it-devices-item" data-index="1" ng-click="item($event)">
+                    0002313m - Тонкий клиент
+                </div>
+                <div class="it-devices-item" data-index="2" ng-click="item($event)">
+                    4521 - Монитор
+                </div>
+            </div>
+            <div style="clear: both"> </div>
+            <div class="it-devices-control">
+                <button type="button" ng-click="deviceacception()" class="it-devices-button button-ok">Принять</button>
+                <button type="button" class="it-devices-button button-cancel" >Отмена</button>
+            </div>
+        </div>
+    </div>
+  </div>
+    <div id="modalrequestors" style="display: none" ng-controller="RequestorCtrl">
+        <div class="it-requestors-background">
+            <div class="it-requestors-header">
+                <div class="it-requestors-header-text">Выбирите заявителя</div>
+            </div>
+            <div class="it-requestors-container">
+                <div class="it-requestors-search-box">
+                    <input type="text" class="it-requestors-search-input" ng-model="searchrequestor" placeholder="Введите имя заявителя..." />
+                    <button type="button" ng-click="searchallrequestors()" class="it-requestors-search-button">Найти</button>
+                </div>
+                <div class="it-requestors-box"></div>
+            </div>
+            <div style="clear: both"> </div>
+            <div class="it-requestors-control">
+                <button type="button" class="it-requestors-button button-ok" ng-click="requestoracception()">Принять</button>
+                <button type="button" class="it-requestors-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+    @Styles.Render("~/Content/ItRequestModals")
+    
+
+</body>
+</html>
+

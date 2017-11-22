@@ -1,0 +1,44 @@
+﻿@model MetroSupport.Models.Department
+<div id="modaldepartment" style="display: none">
+    @using (Html.BeginForm("CreateDepartment", "Departments", FormMethod.Post, new {id = "departmentform"}))
+    {
+        <div class="department-modal-background">
+            <div class="department-modal-header">
+                <div class="header-text">Исполнитель</div>
+            </div>
+            <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+            </div>
+            @Html.HiddenFor(model => model.DepartmentId)
+            <div class="department-modal-inputblock">
+                <div class="department-modal-label">Отдел</div> <div class="department-select">
+                                                                                     @Html.DropDownListFor(model => model.DepartmentName, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            }, "Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.DepartmentName)
+                                                                                        </div>
+            </div>
+            <div class="department-modal-inputblock">
+                <div class="department-modal-label">Подразделение</div> @Html.TextBoxFor(model => model.SubDepartmentName, new { @class = "department-modal-input", id = "subdepartment" }) @Html.ValidationMessageFor(x => x.SubDepartmentName)
+            </div>
+            <div class="department-modal-inputblock">
+                <div class="department-modal-label">Тип</div> <div class="department-select">
+                                                                                     @Html.DropDownListFor(model => model.DepartmentType, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "Base", Text = "Базовый"},
+                                                                                                new SelectListItem(){Value = "Sub", Text = "Составной"}
+                                                                                               
+                                                                                            }, "Выберите тип...", new { id = "typelist" }) @Html.ValidationMessageFor(x => x.DepartmentType)
+                                                                                        </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="department-modal-control">
+                <button type="submit" class="department-modal-button button-save">Сохранить</button>
+                <button type="button" class="department-modal-button button-cancel">Отменить</button>
+            </div>
+        </div>
+    }
+</div>

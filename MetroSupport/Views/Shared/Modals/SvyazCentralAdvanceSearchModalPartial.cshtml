@@ -1,0 +1,136 @@
+﻿@model MetroSupport.ViewModels.FilterViewModel
+<div id="modalsearch" style="display: none">
+    @using (Html.BeginForm("SvyazAdvanceSearch", "CentralCallRequestList", FormMethod.Post, new { id = "advancesearchform" }))
+    {
+        <div class="svyaz-advancesearch-background">
+            <div class="svyaz-advancesearch-header">
+                <div class="svyaz-advancesearch-header-text">Расширенный поиск</div>
+            </div>
+            <div style="margin: 18px 0 0 20px; float: left">
+                <div class="svyaz-advancesearch-box-left">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По персоналу</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Исполнитель</div>@Html.TextBoxFor(x => x.Assigner, new { @class = "svyaz-advancesearch-input", id = "SearchAssigner" })
+                        </div>
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Ответственный</div>@Html.TextBoxFor(x => x.Boss, new { @class = "svyaz-advancesearch-input", id = "SearchBoss" })
+                        </div>
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Заявитель</div>@Html.TextBoxFor(x => x.Requestor, new { @class = "svyaz-advancesearch-input", id = "SearchReporter" })
+                        </div>
+                    </div>
+                </div>
+                <div class="svyaz-advancesearch-box-left">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По дате</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-date-input-lable">С</div>@Html.TextBoxFor(x => x.StartDate, new { @class = "svyaz-advancesearch-input date-text-center", id = "startdatepickersearch" })
+                        </div>
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-date-input-lable">По</div>@Html.TextBoxFor(x => x.EndDate, new { @class = "svyaz-advancesearch-input date-text-center", id = "enddatepickersearch" })
+                        </div>
+                    </div>
+                </div>
+                <div class="svyaz-advancesearch-box-left">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По статусу</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Статус заявки</div><div class="svyaz-advancesearch-select">
+                                @Html.DropDownListFor(model => model.Status, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "-1", Text = "Отклонена"},
+                                                                                                new SelectListItem(){Value = "5", Text = "Назначена"},
+                                                                                                new SelectListItem(){Value = "4", Text = "Отложена"},
+                                                                                                new SelectListItem(){Value = "9", Text = "Ожидается подтверждение"},
+                                                                                                 new SelectListItem(){Value = "12", Text = "Закрыта"}
+                                                                                            }, "Выберите статус...", new { id = "statuslist" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="margin: 18px 0 0 40px; float: left">
+                <div class="svyaz-advancesearch-box-right">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По устройству</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Название</div>@Html.TextBoxFor(x => x.DeviceName, new { @class = "svyaz-advancesearch-input" })
+                        </div>
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Mодель</div>@Html.TextBoxFor(x => x.DeviceModel, new { @class = "svyaz-advancesearch-input" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="svyaz-advancesearch-box-right">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По теме проблемы</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-theme-input-lable">Тема</div> <div class="svyaz-advancesearch-theme-select">
+                                @Html.DropDownListFor(model => model.TroubleTheme, new List<SelectListItem> { }, new { id = "searchthemelist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="svyaz-advancesearch-box-right">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По неисправности</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Причина</div><div class="svyaz-advancesearch-select">
+                                @Html.DropDownListFor(model => model.TroubleReason, new List<SelectListItem>
+                                {
+                                    new SelectListItem {Value = "1", Text = "Другое"},
+                                    new SelectListItem {Value = "2", Text = "Отказ оборудования"},
+                                    new SelectListItem {Value = "3", Text = "Ошибка пользователя"},
+                                    new SelectListItem {Value = "4", Text = "Программная ошибка"}
+                                }, "Выберите причину...", new { id = "reasonlist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="svyaz-advancesearch-box-right">
+                    <div class="svyaz-advancesearch-box-header">
+                        <div class="svyaz-advancesearch-box-header-text">По техобслуживанию</div>
+                    </div>
+                    <div class="svyaz-advancesearch-box-wrap">
+                        <div class="svyaz-advancesearch-container">
+                            <div class="svyaz-advancesearch-input-lable">Профилактика</div>
+                            <div class="svyaz-advancesearch-select">
+                                @Html.DropDownListFor(model => model.Prevention, new List<SelectListItem>
+                                {
+                                    new SelectListItem {Value = "1", Text = "Выполнялась"},
+                                    new SelectListItem {Value = "2", Text = "Не выполнялась"},
+                                }, "Выберите профилактику...", new { id = "reasonlist" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="svyaz-advancesearch-control">
+                <button type="submit" class="svyaz-advancesearch-button button-ok">Найти</button>
+                <button type="button" class="svyaz-advancesearch-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    }
+</div>

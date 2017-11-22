@@ -1,0 +1,39 @@
+﻿@model MetroSupport.Models.Assigner
+<div id="modalassigner" style="display: none">
+    @using (Html.BeginForm("CreateAssigner", "Assigners", FormMethod.Post, new { id = "assignerform" }))
+     {
+    <div class="assigner-modal-background">
+        <div class="assigner-modal-header">
+            <div class="header-text">Исполнитель</div>
+        </div>
+        <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+        </div>
+        @Html.HiddenFor(model => model.AssignerId, new {id="assignerid"})
+           <div class="assigner-modal-inputblock">
+                <div class="assigner-modal-label">Имя исполнителя</div> @Html.TextBoxFor(model => model.AssignerName, new { @class = "assigner-modal-input", id="assignername" }) @Html.ValidationMessageFor(x=>x.AssignerName)
+            </div>
+            <div class="assigner-modal-inputblock">
+                <div class="assigner-modal-label">Ответственный</div> <div class="assigner-select">@Html.DropDownListFor(model => model.BossName, new List<SelectListItem>{} ,new { id = "bosslist" }) @Html.ValidationMessageFor(x => x.BossName)</div>
+</div>
+            <div class="assigner-modal-inputblock">
+                <div class="assigner-modal-label">Сектор</div> @Html.TextBoxFor(model => model.Organization, new { @class = "assigner-modal-input", id = "organization" }) @Html.ValidationMessageFor(x => x.Organization)
+            </div>
+            <div class="assigner-modal-inputblock">
+                <div class="assigner-modal-label">Отдел</div>  <div class="assigner-select">@Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            },"Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department) </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="assigner-modal-control">
+                <button type="submit" class="assigner-modal-button button-save">Сохранить</button>
+                <button type="button" class="assigner-modal-button button-cancel">Отменить</button>
+            </div>
+        
+    </div>
+    }
+</div>

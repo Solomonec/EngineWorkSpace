@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Areas/Administration/Views/_AdministrationLayout.cshtml";
+   
+}
+<div>
+    <div class="adm-user-menu">
+        <ul class="adm-user-point">
+            <li class="adm-user-point-it">@Html.ActionLink("IT", "It", "Assigners") </li>
+            <li class="adm-user-point-svyaz">@Html.ActionLink("Связь", "Svyaz", "Assigners")</li>
+            <li class="adm-user-point-aspp">@Html.ActionLink("АСПП", "Aspp", "Assigners")</li>
+            <li class="adm-user-point-pa">@Html.ActionLink("ПА", "Pa", "Assigners")</li>
+        </ul>
+    </div>
+    @RenderBody()
+</div>
+
+@Scripts.Render("~/bundles/assignermodal")
+@Styles.Render("~/Content/AssignerModal")

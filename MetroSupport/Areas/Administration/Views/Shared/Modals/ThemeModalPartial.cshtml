@@ -1,0 +1,35 @@
+﻿@model MetroSupport.Models.TroubleSubject
+<div id="modaltheme" style="display: none">
+    @using (Html.BeginForm("CreatTheme", "Themes", FormMethod.Post, new {id = "themeform"}))
+    {
+        <div class="theme-modal-background">
+            <div class="theme-modal-header">
+                <div class="header-text">Тема</div>
+            </div>
+            <div id="statusbar" style="display: none; font-size: 12px; text-align: center">
+
+            </div>
+            @Html.HiddenFor(x=>x.SubjectId)
+            <div class="theme-modal-inputblock">
+                <div class="theme-modal-label">Название темы</div> @Html.TextBoxFor(x => x.SubjectName, new {@class = "theme-modal-input"}) @Html.ValidationMessageFor(x => x.SubjectName)
+            </div>
+            <div class="theme-modal-inputblock">
+                <div class="theme-modal-label">Отдел</div><div class="theme-select">@Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                            {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            }, "Выберите отдел...", new { id = "departmentlist" }) @Html.ValidationMessageFor(x => x.Department)
+                                                                                        </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="theme-modal-control">
+                <button type="submit" class="theme-modal-button button-save">Сохранить</button>
+                <button type="button" class="theme-modal-button button-cancel">Отменить</button>
+            </div>
+
+        </div>
+    }
+</div>
+

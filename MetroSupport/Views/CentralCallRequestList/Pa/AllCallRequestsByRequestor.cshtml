@@ -1,0 +1,60 @@
+﻿@using Omu.Awem.Helpers
+@using Omu.AwesomeMvc
+@{
+    ViewBag.Title = "Все заявки по заявителю";
+    Layout = "~/Views/CentralCallRequestList/_CentralCallRequestListLayout.cshtml";
+}
+
+@section Header{
+
+    @Html.Partial("CallRequestMenu/PaCallRequestMenuPartial")
+}
+
+@Html.Partial("ControlPanels/PaControlPanelPartial")
+
+<div style="clear: both"></div>
+<div style="margin: 20px 10px 10px 10px;">
+    @(Html.Awe().Grid("PaCallRequestsGrid")
+      .Columns(new[]{
+           new Column
+                {
+                    Bind = "CallRequestId",
+                    Width = 50,
+                    ClientFormat = "<input type='checkbox' name='id' value='.CallRequestId'/>",
+                    Header = "<input type='checkbox' name='chkAll' />"
+                },
+          new Column{Bind = "Creation", ClientFormat=".CreationDate", Sort = Sort.Desc, Header="Дата", Width=100},
+          new Column{Bind = "Creation", ClientFormat=".CreationTime", Header="Время", Width=100},
+          new Column{Bind = "RequestNumber", Header = "№ заявки",Width=100},
+          new Column{Bind = "Status", ClientFormat = ".RequestStatus", ClientFormatFunc = "formatStatus", Header = "Статус"},
+          new Column{Bind = "RequestorName", Header = "Заявитель", Group=true, Groupable=true, GroupRank=1},
+          new Column{Bind = "AssignBoss" , Header = "Ответственный"},
+          new Column{Bind = "AssignTo" , Header = "Исполнитель", Group=true, Groupable=true, GroupRank=0},
+          new Column{Bind = "Category", Header = "Категория"},
+          new Column{Bind = "TroubleSubject", Header = "Содержание"},
+          new Column{Bind = "Comment", ClientFormatFunc = "formatComment", Header = "Комментарий"},
+          new Column
+                {   Bind = "CallRequestId",
+                    Width=80,
+                    ClientFormat = "<a href=\"/PaCallRequest/Index?Id=.CallRequestId\" class=\"awe-btn-link\" target=\"_blank\"><span class=\"editicon\"><span></a>",
+                    Header = " "
+
+                }
+                    })
+                      .Resizable(true)
+                      .PageSize(100)
+                      .Mod(o => o.PageInfo())
+                      .Sortable(false)
+                      .ShowGroupBar(false)
+                      .Groupable(false)
+                       .ShowGroupedColumn(false).Url(Url.Action("PaAllCallRequestsByRequestorData", "CentralCallRequestList")))
+
+    @Html.Partial("Modals/PaCentralAdvanceSearchModalPartial")
+    @Html.Partial("Modals/PaReportModalPartial")
+    @Styles.Render("~/Content/PaServices")
+
+
+    <link href="@Url.Content("~/Content/PaGridTheme/bui/AwesomeMvc.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/PaGridTheme/bui/awem.css")" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/bundles/PaRequestList")
+</div>

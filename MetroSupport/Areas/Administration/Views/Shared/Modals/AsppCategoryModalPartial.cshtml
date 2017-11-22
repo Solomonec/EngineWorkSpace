@@ -1,0 +1,50 @@
+﻿@model MetroSupport.Models.AsppCategory
+<div id="modalcategory" style="display:none">
+    @using (Html.BeginForm("CreateAsppCategory", "Categories", FormMethod.Post, new { id = "categoryform" }))
+    {
+        <div class="category-modal-background">
+            <div class="category-modal-header">
+                <div class="header-text">Категория</div>
+            </div>
+            <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+            </div>
+            @Html.HiddenFor(model => model.CategoryId, new { id = "categoryid" })
+            <div class="category-modal-inputblock">
+                <div class="category-modal-label">Индексатор</div>
+                <div class="category-select">
+                    @Html.DropDownListFor(model => model.CategoryIndexator, new List<SelectListItem> { }, new { id = "categoryindexlist" }) @Html.ValidationMessageFor(x => x.CategoryIndexator)
+                </div>
+            </div>
+            <div class="category-modal-inputblock">
+                <div class="category-modal-label">Имя категории</div> @Html.TextBoxFor(model => model.CategoryName, new { @class = "category-modal-input", id = "categoryname" }) @Html.ValidationMessageFor(x => x.CategoryName)
+            </div>
+            <div class="category-modal-inputblock">
+                <div class="category-modal-label">Подкатегория</div> <div class="category-select">
+                    @Html.DropDownListFor(model => model.NextSubCategory, new List<SelectListItem> { }, new { id = "subcategoryindexlist" }) @Html.ValidationMessageFor(x => x.NextSubCategory)
+                </div>
+            </div>
+            <div class="category-modal-inputblock">
+                <div class="category-modal-label">Модель</div> @Html.TextBoxFor(model => model.ModelIndexator, new { @class = "category-modal-input", id = "modelindexator" })
+            </div>
+            <div class="category-modal-inputblock">
+                <div class="category-modal-label">Тип категории</div>
+                <div class="category-select">
+                    @Html.DropDownListFor(model => model.CategoryType, new List<SelectListItem>
+                {
+                    new SelectListItem() {Value = "Sub", Text = "Базовый"},
+                    new SelectListItem() {Value = "Base", Text = "Составной"}
+
+                }, "Выберите тип...", new { id = "typelist" }) @Html.ValidationMessageFor(x => x.CategoryType)
+            </div>
+        </div>
+        <div style="clear: both"></div>
+        <div class="category-modal-control">
+            <button type="submit" class="category-modal-button button-save">Сохранить</button>
+            <button type="submit" class="category-modal-button button-cancel">Отменить</button>
+        </div>
+
+    </div>
+    }
+</div>
+

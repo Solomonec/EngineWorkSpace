@@ -1,0 +1,138 @@
+.aspp-requestors-background {
+	width: 600px;
+	height: 500px;
+	background-color: #E5E5E5;
+}
+
+.aspp-requestors-header {
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #03B4E1 0%, #03B4E1 20%, #037B9A 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+
+.aspp-requestors-header-text {
+	margin: 8px 0 0 16px;
+	color: white;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	position:absolute;
+}
+
+.aspp-requestors-container{
+	margin: 28px 0 0 16px;
+}
+
+.aspp-requestors-box {
+	width: 562px;
+	height: 318px;
+	background-color: #E5E5E5;
+	border: 3px solid #D7D7D7;
+	box-shadow: inset 0 -5px 24px rgba(0, 0, 0, 0.2);
+}
+
+.aspp-requestors-item{
+	height: 30px;
+	color:#313131;
+    font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #C0C0C0 0%, #CECECE 6%, #FCFCFC 94%, #FCFCFC 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.aspp-requestors-item:hover{
+	background-image: linear-gradient(to top, #6b6c6d 0%, #03B4E1 6%, white 100%);
+}
+
+.aspp-requestors-item-selected{
+	height: 30px;
+	color:#FFFFFF;
+    font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #6E6F6E 0%, #595858 21%, #898989 87%, #767575 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.aspp-requestors-item-text{
+	margin: 5px 0 0 10px;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	float:left;
+}
+
+.aspp-requestors-control{
+   
+   margin: 23px 17px 0 17px;
+}
+
+.aspp-requestors-search-box
+{
+	height:30px;
+	margin: 0 0 10px 0;
+}
+
+.aspp-requestors-search-button {
+	width: 54px;
+	height: 30px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #03B4E1 0%, #037B9A 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+    font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	border:none;
+	display:block;
+	float:left;
+}
+
+.aspp-requestors-search-input {
+	width: 504px;
+	height: 30px;
+	padding:0 0 0 10px;
+	margin:0 0 ;
+	color:#555555;
+	background-color: #E5E5E5;
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	border:none;
+	display:block;
+	float:left
+}
+
+.aspp-requestors-button {
+	width: 122px;
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #03B4E1 0%, #03B4E1 20%, #037B9A 100%);
+	border-radius: 5px;
+	border:none;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+	color: white;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	cursor:pointer;
+}
+
+.button-ok
+{
+   float:left;
+}
+
+.button-cancel
+{
+   float:right;
+}
+

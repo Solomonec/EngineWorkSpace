@@ -1,0 +1,105 @@
+.pa-devicemodels-background {
+	width: 600px;
+	height: 450px;
+	background-color: #E5E5E5;
+}
+
+.pa-devicemodels-header {
+	height: 36px;
+	background-color: #134b57;
+	background-image: linear-gradient(180deg, #E3BA57 0%, #C88B16 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+}
+
+
+.pa-devicemodels-header-text {
+	margin: 8px 0 0 16px;
+	color: white;
+	font-family: Constantia;
+	font-size: 16px;
+	font-weight: 700;
+	position:absolute;
+}
+
+.pa-devicemodels-container{
+	margin: 28px 0 0 16px;
+}
+
+.pa-devicemodels-box {
+	width: 562px;
+	height: 318px;
+	background-color: #E5E5E5;
+	border: 3px solid #D7D7D7;
+	box-shadow: inset 0 -5px 24px rgba(0, 0, 0, 0.2);
+    overflow: auto;
+}
+
+.pa-devicemodels-item{
+	padding: 5px 0 5px 0;
+	color:#313131;
+	text-align:center;
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-color: #134b57;
+	background-image: linear-gradient(to top, #C0C0C0 0%, #CECECE 6%, #FCFCFC 94%, #FCFCFC 100%);
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.pa-devicemodels-item:hover{
+	background-image: linear-gradient(to top, #6b6c6d 0%, #E3BA57 6%, white 100%);
+}
+
+.pa-devicemodels-item-selected{
+	padding: 5px 0 5px 0;
+	color:#FFFFFF;
+	background-color: #134b57;
+    font-family: Arial;
+	font-size: 14px;
+	font-weight: 700;
+	background-image: linear-gradient(to top, #6E6F6E 0%, #595858 21%, #898989 87%, #767575 100%);
+    text-align:center;
+	border-radius: 5px;
+	cursor:pointer;
+}
+
+.pa-devicemodels-item-text{
+	margin: 5px 0 0 10px;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	float:left;
+}
+
+.pa-devicemodels-control{
+   
+   margin: 13px 17px 0 17px;
+}
+
+.pa-devicemodels-button {
+	width: 122px;
+	height: 36px;
+	background-color: #134b57;
+    background-image: linear-gradient(180deg, #E3BA57 0%, #C88B16 100%);
+	border-radius: 5px;
+	border:none;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+	color: white;
+	font-family: Constantia;
+	font-size: 14px;
+	font-weight: 700;
+	cursor:pointer;
+}
+
+.button-ok
+{
+   float:left;
+}
+
+.button-cancel
+{
+   float:right;
+}
+

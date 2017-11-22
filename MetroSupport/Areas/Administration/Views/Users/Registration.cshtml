@@ -1,0 +1,112 @@
+﻿@using System.Security.AccessControl
+@model MetroSupport.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Registration";
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Administration</title>
+     @Styles.Render("~/Content/Registration")
+    @Scripts.Render("~/bundles/jquery")
+     @Scripts.Render("~/bundles/jqueryval")
+</head>
+<body>
+<div class="auth-head-panel">
+    @Html.Action("UserProfile", "Users")
+</div>
+<div class="logo">
+
+</div>
+<div style="margin: auto 2%; width: auto">
+    <div class="reg-user-wraper">
+        <div class="reg-user-background">
+            <div class="reg-user-header">
+                <div class="reg-user-header-text"> Регистрация пользователя </div>
+            </div>
+            @using (Html.BeginForm("Registration", "Users", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="reg-user-subheader-panel">
+                    <div class="reg-user-subheader-text">Идентификация пользователя</div>
+                </div>
+                <div class="reg-user-inputblock">
+                    <div class="reg-user-correction">
+                        <div class="reg-user-lable">Логин</div>@Html.TextBoxFor(x => x.UserName, new { @class = "reg-user-input" })
+                                                               @Html.ValidationMessageFor(x=>x.UserName)
+                    </div>
+                    <div class="reg-user-correction">
+                        <div class="reg-user-lable">Имя пользователя</div>@Html.TextBoxFor(x=>x.FullName, new {@class="reg-user-input"})
+                                                                          @Html.ValidationMessageFor(x => x.FullName)
+                    </div>
+                </div>
+                <div class="reg-user-subheader-panel">
+                    <div class="reg-user-subheader-text">Укажите пароль</div>
+                </div>
+                <div class="reg-user-inputblock">
+                    <div class="reg-user-correction">
+                        <div class="reg-user-lable">Пароль</div>@Html.PasswordFor(x => x.Password, new { @class = "reg-user-input" })
+                                                                @Html.ValidationMessageFor(x => x.Password)
+                    </div>
+                    <div class="reg-user-correction">
+                        <div class="reg-user-lable">Подтверждение</div>@Html.PasswordFor(x => x.ConfirmPassword, new { @class = "reg-user-input" })
+                                                                       @Html.ValidationMessageFor(x => x.ConfirmPassword)
+                    </div>
+                </div>
+                <div class="reg-user-subheader-panel">
+                    <div class="reg-user-subheader-text">Выберите роли</div>
+                </div>
+                <div id="show">
+                 @for(int i=0; i< Model.Roles.Count();i++)
+                 {
+                    <div class="checkbox-position">
+                     @Html.CheckBoxFor(model => model.Roles[i].Selected, new { id = "Roles_"+i+"__RoleName" })
+                     @Html.LabelFor(model => model.Roles[i].RoleName, Model.Roles[i].RoleName)
+                    @Html.HiddenFor(modle=>Model.Roles[i].RoleName)
+                    </div>
+                 }
+                </div>
+                <div class="reg-user-subheader-panel">
+                    <div class="reg-user-subheader-text">Дополнительно</div>
+                </div>
+                <div style="float: left">
+                    <div class="reg-user-inputblock">
+                        <div class="reg-user-correction">
+                            <div class="reg-user-lable">Служба</div>@Html.TextBoxFor(x => x.Slugba, new { @class = "reg-user-input" })
+                        </div>
+                        <div class="reg-user-correction">
+                            <div class="reg-user-lable">Отдел</div><div class="reg-user-select">@Html.DropDownListFor(model => model.Department, new List<SelectListItem>
+                                                                                                {
+                                                                                                new SelectListItem(){Value = "It", Text = "ИТ"},
+                                                                                                new SelectListItem(){Value = "Svyaz", Text = "Связь"},
+                                                                                                new SelectListItem(){Value = "Aspp", Text = "АСПП"},
+                                                                                                new SelectListItem(){Value = "Pa", Text = "ПА"}
+                                                                                            }, "Выберите отдел...") @Html.ValidationMessageFor(x => x.Department)
+                                                                                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="float: left; margin: 0 0 0 50px;">
+                    <div class="reg-user-inputblock">
+                        <div class="reg-user-correction">
+                            <div class="reg-user-lable">E-mail</div>@Html.TextBoxFor(x => x.Email, new { @class = "reg-user-input" })
+                                                                    @Html.ValidationMessageFor(x => x.Email)
+                        </div>
+                        <div class="reg-user-correction">
+                            <div class="reg-user-lable">Должность</div>@Html.TextBoxFor(x => x.Job, new { @class = "reg-user-input" })
+                        </div>
+                    </div>
+                </div>
+                <div class="reg-user-footer">
+                    <input type="submit" class="register-button" value="Зарегистровать"/>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

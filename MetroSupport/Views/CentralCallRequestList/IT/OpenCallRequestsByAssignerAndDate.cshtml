@@ -1,0 +1,61 @@
+﻿@using Omu.Awem.Helpers
+@using Omu.AwesomeMvc
+@{
+    ViewBag.Title = "OpenCallRequestsByAssignerAndDate";
+    Layout = "~/Views/CentralCallRequestList/_CentralCallRequestListLayout.cshtml";
+}
+
+@section Header{
+
+   @Html.Partial("CallRequestMenu/ItCallRequestMenuPartial")
+}
+
+@Html.Partial("ControlPanels/ItControlPanelPartial")
+
+<div style="clear: both"></div>
+<div style="margin: 20px 10px 10px 10px;">
+    @(Html.Awe().Grid("ItCallRequestsGrid")
+      .Columns(new[]{
+           new Column
+                {
+                    Bind = "CallRequestId",
+                    Width = 50,
+                    ClientFormat = "<input type='checkbox' name='id' value='.CallRequestId'/>",
+                    Header = "<input type='checkbox' name='chkAll' />"
+                },
+          new Column{Bind = "Creation", ClientFormat=".CreationDate", Sort = Sort.Desc, Group=true, Groupable=true, GroupRank=1, Header="Дата",Width=100},
+          new Column{Bind = "Creation", ClientFormat=".CreationTime", Header="Время",Width=100},
+          new Column{Bind = "RequestNumber", Header = "№ заявки",Width=100},
+          new Column{Bind = "Status", ClientFormat = ".RequestStatus", ClientFormatFunc = "formatStatus", Header = "Статус"},
+          new Column{Bind = "RequestorName", Header = "Заявитель"},
+          new Column{Bind = "AssignBoss" , Header = "Ответственный"},
+          new Column{Bind = "AssignTo" , Group=true, Groupable=true, GroupRank=0, Header = "Исполнитель"},
+          new Column{Bind = "Category", Header = "Категория"},
+          new Column{Bind = "TroubleSubject", Header = "Содержание"},
+          new Column{Bind = "Comment",  ClientFormatFunc = "formatComment", Header = "Комментарий"},
+          new Column
+                {
+                    Bind = "CallRequestId",
+                    Width=80,
+                    ClientFormat = "<a href=\"/ItCallRequest/Index?Id=.CallRequestId\" class=\"awe-btn-link\" target=\"_blank\"><span class=\"editicon\"><span></a>",
+                    Header = " "
+
+                }
+                    })
+                     .Resizable(true)
+                     .PageSize(100)
+                      .Mod(o => o.PageInfo())
+                      .Sortable(false)
+                      .ShowGroupBar(false)
+                      .Groupable(false)
+                      .ShowGroupedColumn(false).Url(Url.Action("ItOpenCallRequestsByAssignerAndDateData", "CentralCallRequestList")))
+
+
+    @Html.Partial("Modals/ItCentralAdvanceSearchModalPartial")
+    @Html.Partial("Modals/ItReportModalPartial")
+    @Styles.Render("~/Content/ItServices")
+        
+    <link href="@Url.Content("~/Content/ItGridTheme/bui/AwesomeMvc.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/ItGridTheme/bui/awem.css")" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/bundles/ItRequestList")
+</div>

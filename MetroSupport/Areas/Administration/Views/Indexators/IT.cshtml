@@ -1,0 +1,51 @@
+﻿@using MvcPaging;
+@model MetroSupport.Areas.Administration.ViewModels.CategoryIndexatorViewModel
+@{
+    ViewBag.Title = "IT";
+    Layout = "~/Areas/Administration/Views/Indexators/_IndexatorsLayout.cshtml";
+}
+
+
+<button id="addindexator" class="adm-user-newperson-button adm-color-it">Добавить индексатор</button>
+
+<div class="adm-user-table-wraper">
+    <table class="adm-user-table">
+        <thead>
+        <tr class="adm-user-table-header adm-color-it">
+            <td>Индексатор</td>
+            <td width="40px"></td>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
+        {
+            foreach (var indexator in Model.CategoryIndexators)
+            {
+                <tr>
+                    <td>@indexator.CategoryIndexatorName</td>
+                    <td>@Html.Raw(Html.ActionLink("Удалить", "RemoveCategoryIndexator", new { indexatorid = @indexator.IndexatorId }).ToHtmlString().Replace("Удалить", "<span class=\"deleteico\"></span>"))</td>
+
+                </tr>
+
+
+            }
+
+        }
+        else
+        {
+            <tr>
+                <td></td>
+            
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+@if (Model != null)
+{
+    <div style="height: 45px;">
+        @Html.Pager(Model.CategoryIndexators.PageSize, Model.CategoryIndexators.PageNumber, Model.CategoryIndexators.TotalItemCount).Options(o => o.DisplayTemplate("MetroPager").MaxNrOfPages(10).AlwaysAddFirstPageNumber())
+    </div>
+}
+@Html.Partial("Modals/CategoryIndexatorModalPartial", Model.CategoryIndexator)

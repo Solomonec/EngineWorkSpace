@@ -1,0 +1,10 @@
+﻿@{
+    Layout = "~/Areas/Administration/Views/_AdministrationLayout.cshtml";
+    ViewBag.CurrentAction = ViewContext.RouteData.GetRequiredString("action");
+}
+
+<div style="padding: 25px 0 0 0">
+    @RenderBody()
+</div>
+@Scripts.Render("~/bundles/locationmodal")
+@Styles.Render("~/Content/LocationModal")

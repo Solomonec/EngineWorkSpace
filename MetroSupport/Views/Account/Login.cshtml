@@ -1,0 +1,46 @@
+﻿@model MetroSupport.Models.LoginModel
+
+@{
+    ViewBag.Title = "Выполнить вход";
+}
+
+<!DOCTYPE html>
+<html >
+<head>
+   <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+    Remove this if you use the .htaccess -->
+  
+
+    @Styles.Render("~/Content/LoginOn")
+</head>
+<body>
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+<div class="loginbox">
+    <div class="logo">
+
+    </div>
+
+    <div class="authbox">
+        <div style="float: none; margin-top: 40px; margin-left: 40px">
+            <div class="lbltext">Логин </div>
+            <div> @Html.TextBoxFor(x => x.UserName, new { @class = "loginfld" })</div>
+            <div class="lbltext">Пароль</div>
+            <div>@Html.PasswordFor(x => x.Password, new { @class = "paswfld" }) </div>
+        </div>
+        <div style="float: left; margin: 40px 0px 0px 215px;">@Html.CheckBoxFor(x => x.RememberMe)<label class="lblremme">запомнить</label><input type="submit" value="Войти" class="entbtn"/>
+        </div>
+
+
+    </div>
+</div>
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>
+
+

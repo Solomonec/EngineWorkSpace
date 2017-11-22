@@ -1,0 +1,23 @@
+﻿@model MetroSupport.Models.Location
+<div id="modallocation" style="display: none">
+  @using (Html.BeginForm("CreateLocation", "Locations", FormMethod.Post, new { id = "locationform" }))
+  {
+    <div class="location-modal-background">
+        <div class="location-modal-header">
+            <div class="header-text">Расположение</div>
+        </div>
+        <div id="statusbar" style="display: none; font-size: 12px; text-align:center">
+
+        </div>
+            @Html.HiddenFor(model=>model.LocationId)
+            <div class="location-modal-inputblock">
+                <div class="location-modal-label">Название площадки</div> @Html.TextBoxFor(modal => modal.LocationName, new { @class="location-modal-input", id="locationname"}) @Html.ValidationMessageFor(x => x.LocationName)
+            </div>
+            <div style="clear: both"></div>
+            <div class="location-modal-control">
+                <button type="submit" class="location-modal-button button-save">Сохранить</button>
+                <button type="button" class="location-modal-button button-cancel">Отменить</button>
+            </div>
+    </div>
+  }
+</div>

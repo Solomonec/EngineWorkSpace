@@ -1,0 +1,513 @@
+﻿@model MetroSupport.ViewModels.SvyazRequest_LogViewModel
+@using MetroSupport.Commons
+@{
+    Layout = null;
+
+}
+
+<!doctype html>
+<html ng-app="SvyazRequestApp">
+<head>
+    <meta charset="utf-8">
+    <title>@Model.SvyazRequest.RequestNumber - @Model.SvyazRequest.TroubleSubject</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/SvyazRequest")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquerymodal")
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/Svyazrequest")
+
+
+</head>
+<body>
+    <div class="header-panel" ng-controller="ButtonsControlCtrl">
+        <ul style="margin: 0; padding: 0; list-style-image: none;">
+            @if (Model.SvyazRequest.Status == 0)
+            {
+                if (User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="saverequest()">Назначить и уведомить</a></li>
+                }
+            }
+            @if (Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4)
+            {
+                if (User.IsInRole("SvyazBoss") || User.IsInRole("SvyazWork"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                    }
+                }
+                if (User.IsInRole("CallCenter"))
+                {
+                    <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
+                }
+            }
+            @if (Model.SvyazRequest.Status == 5 & Model.SvyazRequest.IsWorkingOn == 0)
+            {
+                if (User.IsInRole("SvyazWork"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
+                    }
+                }
+            }
+            @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("SvyazWork"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
+                    }
+                }
+            }
+            @if (Model.SvyazRequest.Status == 9)
+            {
+                if (User.IsInRole("SvyazBoss"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
+                    }
+                }
+            }
+            @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("SvyazWork"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-lgsize"})</li>
+                    }
+                }
+            }
+            @if (Model.SvyazRequest.Status == 9)
+            {
+                if (User.IsInRole("SvyazBoss"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss)
+                    {
+                        <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
+                    }
+                }
+            }
+            @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
+            {
+                if (User.IsInRole("SvyazBoss") || User.IsInRole("SvyazWork"))
+                {
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    {
+                        <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openredenyrequest()">Отклонить</a></li>
+                    }
+                }
+            }
+        </ul>
+        @Html.Partial("_LoginPartial", Model.User)
+    </div>
+    <div class="request-header-box">
+
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">№ заявки: </span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Model.SvyazRequest.RequestNumber</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-lgfont request-header-item-lgsize request-header-item-name-color">Проблема: </span> <span class="request-header-item-lgfont request-header-item-lgsize-def request-header-item-content-color">@Theme.ThemePrimaryDefault(Model.SvyazRequest.TroubleSubject)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color ">Дата:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color"> @Dates.DateNullConversion(Model.SvyazRequest.Creation) @Dates.TimeNullConversion(Model.SvyazRequest.Time)</span>
+        <div class="request-header-clear">  </div>
+        <span class="request-header-item-smfont request-header-item-smsize request-header-item-name-color">Статус:</span> <span class="request-header-item-smfont request-header-item-smsize request-header-item-content-color">@Status.StatusConvertion(Model.SvyazRequest.Status, Model.SvyazRequest.IsWorkingOn)</span>
+        <div class="request-header-clear">  </div>
+    </div>
+
+    <div class="tab-link-zone">
+        <ul id="tabs">
+            <li><a href="#" name="tab1">Заявка</a></li>
+            <li><a href="#" name="tab2">Работа</a></li>
+            <li><a href="#" name="tab3">История</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        @using (Html.BeginForm("CreateAndSave", "SvyazCallRequest", FormMethod.Post, new { id = "svyazcallrequestform" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.SvyazRequest.CallRequestId)
+            <div id="tab1">
+                <div class="request-subject-box" ng-controller="TroubleSubjectCtrl">
+                    <div class="request-subject-name">Тема заявки:</div> @Html.TextBoxFor(x => x.SvyazRequest.TroubleSubject, new { @class = "request-subject-input", ng_model = "theme.themename", @ng_init = "theme.themename ='" + Model.SvyazRequest.TroubleSubject + "'", @readonly = "readonly" }) <input type="button" ng-click="openthemedialog()" class="request-subject-button" value="..." />
+                    <div id="modalthemes" style="display: none">
+                        <div class="svyaz-themes-background">
+                            <div class="svyaz-themes-header">
+                                <div class="svyaz-themes-header-text">Выбирите тему</div>
+                            </div>
+                            <div class="svyaz-themes-container">
+                                <div class="svyaz-themes-box">
+
+                                </div>
+
+                            </div>
+                            <div style="clear: both"> </div>
+                            <div class="svyaz-themes-control">
+                                <button type="button" class="svyaz-themes-button button-ok" ng-click="themeacception()">Принять</button>
+                                <button type="button" class="svyaz-themes-button button-cancel">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-comment-box">
+                    <div class="request-comment-name">Комментарий:</div> @Html.TextAreaFor(x => x.SvyazRequest.Comment, new { @class = "request-comment-input" })
+                </div>
+
+                <div class="request-infobox-lg" ng-controller="RequestorCtrl">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Заявитель</div>
+                    </div>
+                    <div class="request-infobox-lg-context">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">ФИО</div> @Html.TextBoxFor(x => x.SvyazRequest.RequestorName, new { @class = "request-infobox-context-input", ng_model = "requestor.requestorname", @ng_init = "requestor.requestorname ='" + Model.SvyazRequest.RequestorName + "'" }) <input type="button" ng-click="openrequestordialog()" class="request-infobox-context-button" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подразделение</div> @Html.TextBoxFor(x => x.SvyazRequest.Organization, new { @class = "request-infobox-context-input", ng_model = "requestor.department", @ng_init = "requestor.department ='" + Model.SvyazRequest.Organization + "'" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.SvyazRequest.Department, new { @class = "request-infobox-context-input", ng_model = "requestor.subdepartment", @ng_init = "requestor.subdepartment ='" + Model.SvyazRequest.Department + "'" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Тел.</div> @Html.TextBoxFor(x => x.SvyazRequest.Tel, new { @class = "request-infobox-context-input", ng_model = "requestor.tel", @ng_init = "requestor.tel ='" + Model.SvyazRequest.Tel + "'"})
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Адрес</div> @Html.TextBoxFor(x => x.SvyazRequest.Address, new { @class = "request-infobox-context-input", ng_model = "requestor.address", @ng_init = "requestor.address ='" + Model.SvyazRequest.Address + "'"})
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Комната</div> @Html.TextBoxFor(x => x.SvyazRequest.Room, new { @class = "request-infobox-context-input", ng_model = "requestor.room", @ng_init = "requestor.room ='" + Model.SvyazRequest.Room + "'" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Этаж</div> @Html.TextBoxFor(x => x.SvyazRequest.Floor, new { @class = "request-infobox-context-input", ng_model = "requestor.floor", @ng_init = "requestor.floor ='" + Model.SvyazRequest.Floor + "'" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Площадка</div>
+                            <div class="request-infobox-context-select"> @Html.DropDownListFor(x => x.SvyazRequest.Location, Model.Location, new { @readonly = "readonly" })</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="request-infobox-lg">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Описание проблемы</div>
+                    </div>
+                    <div class="request-infobox-lg-context" ng-controller="CategoriesCtrl">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Направление</div> @Html.TextBoxFor(x => x.SvyazRequest.TroubleDepartment, new { @class = "request-infobox-context-inv", ng_model = "category.troubledepartment", @readonly = "readonly" }) 
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Категория</div> @Html.TextBoxFor(x => x.SvyazRequest.Category, new { @class = "request-infobox-context-input", ng_model = "category.categoryname", @ng_init = "category.categoryname ='" + Model.SvyazRequest.Category + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId, new { ng_model = "category.nextsubcategory0", @ng_init = "category.nextsubcategory0 ='" + Model.SvyazRequest.NextSubCategoryId + "'", id = "nextsubcategory0", style = "display: none" }) <input type="button" class="request-infobox-context-button" data-number="0" ng-click="opencategoriesdialog($event)" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория1</div> @Html.TextBoxFor(x => x.SvyazRequest.SubCategory1, new { @class = "request-infobox-context-input", ng_model = "category.subcategory1", @ng_init = "category.subcategory1 ='" + Model.SvyazRequest.SubCategory1 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId1, new { ng_model = "category.nextsubcategory1", @ng_init = "category.nextsubcategory1 ='" + Model.SvyazRequest.NextSubCategoryId1 + "'", id = "nextsubcategory1", style = "display: none" })<div ng-show="category.btncategory1">
+                                <input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="1" value="..." />
+                            </div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория2</div> @Html.TextBoxFor(x => x.SvyazRequest.SubCategory2, new { @class = "request-infobox-context-input", ng_model = "category.subcategory2", @ng_init = "category.subcategory2 ='" + Model.SvyazRequest.SubCategory2 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId2, new { ng_model = "category.nextsubcategory2", @ng_init = "category.nextsubcategory2 ='" + Model.SvyazRequest.NextSubCategoryId2 + "'", id = "nextsubcategory2", style = "display: none" })
+                            <div ng-show="category.btncategory2">
+                                <input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="2" value="..." />
+                            </div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория3</div> @Html.TextBoxFor(x => x.SvyazRequest.SubCategory3, new { @class = "request-infobox-context-input", ng_model = "category.subcategory3", @ng_init = "category.subcategory3 ='" + Model.SvyazRequest.SubCategory3 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId3, new { ng_model = "category.nextsubcategory3", @ng_init = "category.nextsubcategory3 ='" + Model.SvyazRequest.NextSubCategoryId3 + "'", id = "nextsubcategory3", style = "display: none" })
+                            <div ng-show="category.btncategory3">
+                                <input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="3" value="..." />
+                            </div>
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория4</div> @Html.TextBoxFor(x => x.SvyazRequest.SubCategory4, new { @class = "request-infobox-context-input", ng_model = "category.subcategory4", @ng_init = "category.subcategory4 ='" + Model.SvyazRequest.SubCategory4 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId4, new { ng_model = "category.nextsubcategory4", @ng_init = "category.nextsubcategory4 ='" + Model.SvyazRequest.NextSubCategoryId4 + "'", id = "nextsubcategory4", style = "display: none" })<div ng-show="category.btncategory4">
+                                <input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="4" value="..." />
+                            </div>
+                        </div>
+
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Подкатегория5</div> @Html.TextBoxFor(x => x.SvyazRequest.SubCategory5, new { @class = "request-infobox-context-input", ng_model = "category.subcategory5", @ng_init = "category.subcategory5 ='" + Model.SvyazRequest.SubCategory5 + "'", @readonly = "readonly" }) @Html.TextBoxFor(x => x.SvyazRequest.NextSubCategoryId5, new { ng_model = "category.nextsubcategory5", @ng_init = "category.nextsubcategory5 ='" + Model.SvyazRequest.NextSubCategoryId5 + "'", id = "nextsubcategory5", style = "display: none" })
+                            <div ng-show="category.btncategory5">
+                                <input type="button" class="request-infobox-context-button" ng-click="opencategoriesdialog($event)" data-number="5" value="..." />
+                            </div>
+                        </div>
+                        <div class="request-infobox-context-container"> </div>
+                        <div class="request-infobox-context-container" ng-show="category.modelcontainer">
+                            <div class="request-infobox-context-name">Модель</div> @Html.TextBoxFor(x => x.SvyazRequest.Model, new { @class = "request-infobox-context-input", ng_model = "category.model", @ng_init = "category.model ='" + Model.SvyazRequest.Model + "'", @readonly = "readonly" }) @Html.HiddenFor(x => x.SvyazRequest.ModelId, new { ng_model = "category.modelid", @ng_init = "category.modelid ='" + Model.SvyazRequest.ModelId + "'", id = "modelid" }) <input type="button" class="request-infobox-context-button" ng-click="opendevicemodels()" value="..." />
+                        </div>
+                        <div id="modalcategories" style="display: none">
+                            <div class="svyaz-categories-background">
+                                <div class="svyaz-categories-header">
+                                    <div class="svyaz-categories-header-text">Выбирите категорию</div>
+                                </div>
+                                <div class="svyaz-categories-container">
+                                    <div class="svyaz-categories-box">
+
+                                    </div>
+                                </div>
+                                <div style="clear: both"> </div>
+                                <div class="svyaz-categories-control">
+                                    <button type="button" class="svyaz-categories-button button-ok" ng-click="categoryacception()">ОК</button>
+                                    <button type="button" class="svyaz-categories-button button-cancel">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="request-header-clear"> </div>
+                <div class="request-infobox-sm">
+
+                </div>
+                <div class="request-infobox-sm">
+                    <div class="request-infobox-header">
+                        <div class="request-infobox-text">Исполнитель</div>
+                    </div>
+                    <div class="request-infobox-sm-context" ng-controller="AssignerCtrl">
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Исполнитель</div> @Html.TextBoxFor(x => x.SvyazRequest.AssignTo, new { @class = "request-infobox-context-input", ng_model = "assigner.assignername", @ng_init = "assigner.assignername ='" + Model.SvyazRequest.AssignTo + "'", @readonly = "readonly" }) <input type="button" class="request-infobox-context-button" ng-click="openassignerdialog()" value="..." />
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Ответственный</div>@Html.TextBoxFor(x => x.SvyazRequest.AssignBoss, new { @class = "request-infobox-context-input", ng_model = "assigner.bossname", @ng_init = "assigner.bossname ='" + Model.SvyazRequest.AssignBoss + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Сектор</div> @Html.TextBoxFor(x => x.SvyazRequest.AssignSubDepartment, new { @class = "request-infobox-context-input", ng_model = "assigner.subdepartment", @ng_init = "assigner.subdepartment ='" + Model.SvyazRequest.AssignSubDepartment + "'", @readonly = "readonly" })
+                        </div>
+                        <div class="request-infobox-context-container">
+                            <div class="request-infobox-context-name">Отдел</div> @Html.TextBoxFor(x => x.SvyazRequest.AssignDepartment, new { @class = "request-infobox-context-input", ng_model = "assigner.department", @ng_init = "assigner.department ='" + Model.SvyazRequest.AssignDepartment + "'", @readonly = "readonly" })
+                        </div>
+
+                        <div id="modalassigners" style="display: none">
+                            <div class="svyaz-assigner-background">
+                                <div class="svyaz-assigner-header">
+                                    <div class="svyaz-assigner-header-text">Выбирите исполнителя</div>
+                                </div>
+                                <div class="svyaz-assigner-container">
+                                    <div style="float: left">
+                                        <div class="svyaz-assigner-head-note">
+                                            Подразделение
+                                        </div>
+                                        <div class="svyaz-assigner-department-box">
+
+                                        </div>
+                                    </div>
+
+                                    <div style="margin: 0 0 0 20px; float: left">
+                                        <div class="svyaz-assigner-head-note">
+                                            Исполнители
+                                        </div>
+                                        <div class="svyaz-assigner-box">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clear: both"> </div>
+                                <div class="svyaz-assigner-control">
+                                    <button type="button" class="svyaz-assigner-button button-ok" ng-click="assigneracception()">Принять</button>
+                                    <button type="button" class="svyaz-assigner-button button-cancel">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="tab2">
+                <div class="request-work-sm">
+                    <div class="request-work-header">
+                        <div class="request-work-text">Время выполнения работы</div>
+                    </div>
+                    <div class="request-work-sm-context">
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.SvyazRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.SvyazRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.SvyazRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.SvyazRequest.StartTimeInWork), id = "starttimepicker" })
+                            <input type="button" class="request-work-context-button" value="..." />
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.SvyazRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.SvyazRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.SvyazRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.SvyazRequest.EndTimeInWork), id = "endtimepicker" })
+                            <input type="button" class="request-work-context-button" value="..." />
+                        </div>
+                        <div class="request-work-context-container">
+                        </div>
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Затрачено</div> @Html.TextBoxFor(x => x.SvyazRequest.TotalWorkInDays, new { @class = "request-work-context-total", @readonly = "readonly", id = "totaldays" })
+                            <div class="request-work-context-total-lable"> дн. </div> @Html.TextBoxFor(x => x.SvyazRequest.TotalWorkInHours, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalhours" })
+                            <div class="request-work-context-total-lable">час.</div>@Html.TextBoxFor(x => x.SvyazRequest.TotalWorkInMinutes, new { @class = "request-work-context-total", @readonly = "readonly", id = "totalminutes" })
+                            <div class="request-work-context-total-lable">мин.</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+                <div class="request-work-sm">
+                    <div class="request-work-header">
+                        <div class="request-work-text">Параметры работы</div>
+                    </div>
+                    <div class="request-work-sm-context">
+                        <div class="request-work-context-container">
+                            <div class="request-work-context-name">Причина неполадки</div>
+                            <div class="request-work-context-select">
+                                @Html.DropDownListFor(x => x.SvyazRequest.TroubleReason, new List<SelectListItem>
+                        {
+                            new SelectListItem {Value = "0", Text = ""},
+                            new SelectListItem {Value = "1", Text = "Другое"},
+                            new SelectListItem {Value = "2", Text = "Отказ оборудования"},
+                            new SelectListItem {Value = "3", Text = "Ошибка пользователя"},
+                            new SelectListItem {Value = "4", Text = "Программная ошибка"}
+
+                        },
+                            new { @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="request-work-context-container">
+                      
+                        </div>
+                        <div class="request-work-context-container">
+                        </div>
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+                <div class="request-work-lg">
+                    <div class="request-work-lg-header">
+                        <div class="request-work-text">Описание выполненной работы</div>
+                    </div>
+                    <div class="request-work-lg-context">
+                        <div class="request-work-context-lg-container">
+                            <div class="request-work-context-name">Описание проблемы</div> @Html.TextAreaFor(x => x.SvyazRequest.TroubleDescription, new { @class = "request-work-context-lg-input", id = "troubledescription" })
+                        </div>
+                        <div class="request-work-context-lg-container">
+                            <div class="request-work-context-name">Решение проблемы</div> @Html.TextAreaFor(x => x.SvyazRequest.ResolveDescription, new { @class = "request-work-context-lg-input", id = "resolvedescription" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="tab3">
+            <div class="request-history-input-box">
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Создано</div>
+                </div>
+                <div class="request-history-input">@Model.SvyazRequestLog.WhoCreate</div>
+                <div class="request-header-clear"></div>
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Дата и время</div>
+                </div>
+                <div class="request-history-input">@Dates.DateNullConversion(Model.SvyazRequestLog.CreateDate) @Dates.TimeNullConversion(Model.SvyazRequestLog.CreateDate)</div>
+            </div>
+            <div class="request-history-input-box">
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Изменено</div>
+                </div>
+                <div class="request-history-input">@Model.SvyazRequestLog.WhoChange</div>
+                <div class="request-header-clear"> </div>
+                <div class="request-history-input-header">
+                    <div class="request-history-header-text">Дата и время</div>
+                </div>
+                <div class="request-history-input">@Dates.DateNullConversion(Model.SvyazRequestLog.ChangeDate) @Dates.TimeNullConversion(Model.SvyazRequestLog.ChangeDate)</div>
+            </div>
+            <div class="request-header-clear"> </div>
+            <div class="request-history-log-box">
+                <div class="request-history-log-header">
+                    <div class="request-history-header-log-text">Детализация</div>
+                </div>
+                <div class="request-history-log-board">
+                    <div class="request-history-log-context">
+                        @if (Model.SvyazRequestLog.LogTextCollection != null)
+                        {
+                            foreach (string logtext in Model.SvyazRequestLog.LogTextCollection)
+                            {
+                                @logtext<br>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalholdon" style="display: none">
+        @using (Html.BeginForm("MakeHold", "SvyazCallRequest", FormMethod.Post, new { id = "holdonform" }))
+        {
+            <div class="svyaz-holdon-background">
+                <div class="svyaz-holdon-header">
+                    <div class="svyaz-holdon-header-text">Укажите причину продления заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.SvyazRequest.CallRequestId)
+                <div class="svyaz-holdon-container">
+                    @Html.TextArea("description", new { @class = "svyaz-holdon-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="svyaz-holdon-control">
+                    <button type="submit" class="svyaz-holdon-button button-ok">Продлить</button>
+                    <button type="button" class="svyaz-holdon-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="modalreturnto" style="display: none">
+        @using (Html.BeginForm("ReturnToAssigner", "SvyazCallRequest", FormMethod.Post, new { id = "returntoform" }))
+        {
+            <div class="svyaz-returnto-background">
+                <div class="svyaz-returnto-header">
+                    <div class="svyaz-returnto-header-text">Укажите причину возврата заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.SvyazRequest.CallRequestId)
+                <div class="svyaz-returnto-container">
+                    @Html.TextArea("description", new { @class = "svyaz-returnto-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="svyaz-returnto-control">
+                    <button type="submit" class="svyaz-returnto-button button-ok">Вернуть</button>
+                    <button type="button" class="svyaz-returnto-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="modaldeny" style="display: none">
+        @using (Html.BeginForm("Deny", "SvyazCallRequest", FormMethod.Post, new { id = "denyform" }))
+        {
+            <div class="svyaz-returnto-background">
+                <div class="svyaz-returnto-header">
+                    <div class="svyaz-returnto-header-text">Укажите причину возврата заявки</div>
+                </div>
+                @Html.Hidden("requestid", Model.SvyazRequest.CallRequestId)
+                <div class="svyaz-returnto-container">
+                    @Html.TextArea("description", new { @class = "svyaz-returnto-box" })
+                </div>
+                <div style="clear: both"> </div>
+                <div class="svyaz-returnto-control">
+                    <button type="submit" class="svyaz-returnto-button button-ok">Вернуть</button>
+                    <button type="button" class="svyaz-returnto-button button-cancel">Отмена</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    
+    <div id="modalrequestors" style="display: none" ng-controller="RequestorCtrl">
+        <div class="svyaz-requestors-background">
+            <div class="svyaz-requestors-header">
+                <div class="svyaz-requestors-header-text">Выбирите заявителя</div>
+            </div>
+            <div class="svyaz-requestors-container">
+                <div class="svyaz-requestors-search-box">
+                    <input type="text" class="svyaz-requestors-search-input" ng-model="searchrequestor" placeholder="Введите имя заявителя..." />
+                    <button type="button" ng-click="searchallrequestors()" class="svyaz-requestors-search-button">Найти</button>
+                </div>
+                <div class="svyaz-requestors-box"></div>
+            </div>
+            <div style="clear: both"> </div>
+            <div class="svyaz-requestors-control">
+                <button type="button" class="svyaz-requestors-button button-ok" ng-click="requestoracception()">Принять</button>
+                <button type="button" class="svyaz-requestors-button button-cancel">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    @Styles.Render("~/Content/SvyazRequestModals")
+
+
+</body>
+</html>
