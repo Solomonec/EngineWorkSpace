@@ -148,7 +148,7 @@ namespace MetroSupport.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult SendForAprove(string requestid)
         {
 
@@ -174,7 +174,7 @@ namespace MetroSupport.Controllers
             }
         }
         
-        [HttpPost]
+        [HttpGet]
         public ActionResult CloseRequest(string requestid)
         {
             bool statement = false;

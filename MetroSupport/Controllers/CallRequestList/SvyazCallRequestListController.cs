@@ -315,14 +315,18 @@ namespace MetroSupport.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-           
-            IQueryable<SearchResultModel> callrequests = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Svyaz, filtermodel).Take(100);
-            List<SearchResultModel> search = callrequests.ToList();
-            if (callrequests == null)
+
+            SearchResult_FilterViewModel FilterResultModel = new SearchResult_FilterViewModel
+            {
+                Filter = new FilterViewModel(),
+                SearchResult = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Svyaz, filtermodel).Take(200)
+            };
+
+            if (FilterResultModel.SearchResult == null)
             {
                 return HttpNotFound();
             }
-            return View("AdvanceSearch", callrequests);
+            return View("AdvanceSearch", FilterResultModel);
         }
 
 

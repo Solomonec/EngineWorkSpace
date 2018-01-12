@@ -77,6 +77,40 @@ function initializeDatepickers() {
             }
         }
     );
+
+    $('#startdatetimenow').click(function () {
+
+            var datetime = new Date();
+            $('#startdatepicker').val((formatDateTimeValue(datetime.getDay()) + "." + formatMonthValue(datetime.getMonth()) + "." + formatDateTimeValue(datetime.getFullYear())).toString());
+            $('#starttimepicker').val((formatDateTimeValue(datetime.getHours()) + ":" + formatDateTimeValue(datetime.getMinutes())).toString())
+        }
+    );
+
+
+    $('#enddatetimenow').click(function () {
+
+            var datetime = new Date();
+            $('#enddatepicker').val((formatDateTimeValue(datetime.getDay()) + "." + formatMonthValue(datetime.getMonth()) + "." + formatDateTimeValue(datetime.getFullYear())).toString());
+            $('#endtimepicker').val((formatDateTimeValue(datetime.getHours()) + ":" + formatDateTimeValue(datetime.getMinutes())).toString());
+        }
+    );
+
+    function formatDateTimeValue(value) {
+        var intval = parseInt(value, 10);
+        if (intval <= 9)
+            return '0' + intval.toString();
+        else
+            return intval.toString();
+    }
+
+    function formatMonthValue(value) {
+        var intval = parseInt(value, 10);
+        if (intval <= 9)
+            return '0' + (intval + 1).toString();
+        else
+            return (intval + 1).toString();
+
+    }
 }
 
 function WorkCalculation(startDate, endDate, startTime, endTime) {

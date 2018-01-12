@@ -400,3 +400,37 @@ body{
 {
     color: #217F00;
 }
+
+.findnewrequests {
+    margin: 20% 20%;
+    color: #003b62;
+    font-size: 18px;
+    font-weight: bold
+}
+
+.findnewrequests-status{
+    background: url("img/findrequest.png") no-repeat;
+    width: 250px;
+    height: 80px;
+    margin: auto 25%; 
+    
+}
+
+.nonewrequests {
+    margin: 20% 25%;
+    color: #1da26b;
+    font-size: 18px;
+    font-weight: bold
+}
+
+.nonewrequests-text, .findnewrequests-text {
+    width: 290px;
+}
+
+.nonewrequests-status{
+    background: url("img/norequest.png") no-repeat;
+    width: 250px;
+    height: 80px; 
+    margin: auto 35%; 
+    
+}

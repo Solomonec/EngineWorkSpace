@@ -25,7 +25,7 @@
         <ul style="margin: 0; padding: 0; list-style-image: none;">
             @if (Model.ItRequest.Status == 0)
             {
-                if (User.IsInRole("ItBoss") || User.IsInRole("CallCenter"))
+                if (User.IsInRole("ItBoss") || User.IsInRole("CallCenter")|| User.IsInRole("Administrator"))
                 {
                     <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="saverequest()">Назначить и уведомить</a></li>
                 }
@@ -39,16 +39,16 @@
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                     }
                 }
-                if (User.IsInRole("CallCenter"))
+                if (User.IsInRole("CallCenter") || User.IsInRole("Administrator"))
                 {
                     <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                 }
             }
             @if (Model.ItRequest.Status == 5 & Model.ItRequest.IsWorkingOn == 0)
             {
-                if (User.IsInRole("ItWork"))
+                if (User.IsInRole("ItWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    if (Model.User.FullName == Model.ItRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
                     }
@@ -56,9 +56,9 @@
             }
             @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("ItWork"))
+                if (User.IsInRole("ItWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    if (Model.User.FullName == Model.ItRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
                     }
@@ -67,9 +67,9 @@
             }
             @if (Model.ItRequest.Status == 9)
             {
-                if (User.IsInRole("ItBoss"))
+                if (User.IsInRole("ItBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignBoss)
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
                     }
@@ -77,9 +77,9 @@
             }
             @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("ItWork"))
+                if (User.IsInRole("ItWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignTo)
+                    if (Model.User.FullName == Model.ItRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-lgsize"})</li>
                     }
@@ -87,9 +87,9 @@
             }
             @if (Model.ItRequest.Status == 9)
             {
-                if (User.IsInRole("ItBoss"))
+                if (User.IsInRole("ItBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignBoss)
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "ItCallRequest", new {@requestid = Model.ItRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
                     }
@@ -97,9 +97,9 @@
             }
             @if ((Model.ItRequest.Status == 5 || Model.ItRequest.Status == 4) & Model.ItRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("ItWork") || User.IsInRole("ItBoss"))
+                if (User.IsInRole("ItWork") || User.IsInRole("ItBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.ItRequest.AssignBoss || Model.User.FullName == Model.ItRequest.AssignTo)
+                    if (Model.User.FullName == Model.ItRequest.AssignBoss || Model.User.FullName == Model.ItRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="opendenyrequest()">Отклонить</a></li>
                     }
@@ -374,11 +374,11 @@
             <div class="request-work-sm-context">
                 <div class="request-work-context-container">
                     <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.ItRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.ItRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.ItRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.ItRequest.StartTimeInWork), id = "starttimepicker" })
-                    <input type="button" class="request-work-context-button" value="..." />
+                    <input type="button" id="startdatetimenow" class="request-work-context-button" value="..." />
                 </div>
                 <div class="request-work-context-container">
                     <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.ItRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.ItRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.ItRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.ItRequest.EndTimeInWork), id = "endtimepicker" })
-                    <input type="button" class="request-work-context-button" value="..." />
+                    <input type="button" id="enddatetimenow" class="request-work-context-button" value="..." />
                 </div>
                 <div class="request-work-context-container">
                 </div>
@@ -558,7 +558,7 @@
 
 <div id="modaldevices" style="display: none">
     <div class="it-devices-background" ng-controller="DeviceInfoCtrl">
-        <div class=" it-devices-header">
+        <div class="it-devices-header">
             <div class="it-devices-header-text">Выбирите устройство</div>
         </div>
         <div class="it-devices-container">

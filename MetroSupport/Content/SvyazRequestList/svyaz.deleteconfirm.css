@@ -1,0 +1,83 @@
+
+.deleteconfirm-modal-background {
+	width: 600px;
+    background-color: #E5E5E5;
+}
+
+.deleteconfirm-modal-header{
+	height: 36px;
+	background-color: #7166D7;
+    background-image: linear-gradient(to top, #4D3992 0%, #4D3992 0%, #4D3992 26%, #7166D7 84%, #7166D7 100%);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+   
+}
+
+.header-text{
+	margin: 5px 0 0 13px;
+    color: white;
+    font-family: Constantia;
+	font-size: 18px;
+	font-weight: 700;	
+	position:absolute;
+}
+
+
+.deleteconfirm-modal-content
+{
+	margin: 64px 0 0 90px;
+	
+}
+
+.deleteconfirm-image {
+    width: 60px;
+    height: 60px;
+    background-image:url(/Content/SvyazRequestList/img/question.png);
+    float: left;
+}
+
+.deleteconfirm-text {
+    width: 277px;
+    height: 60px;
+    margin: 8px 0 0 52px; 
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: 700;
+    color: #656565;
+    float: left;
+}
+
+.deleteconfirm-modal-button{
+	width: 122px;
+	height: 36px;
+    color: white;
+	font-family: Arial;
+    background-color: #7166D7;
+    background-image: linear-gradient(180deg, #4D3992 0%, #7166D7 100%);
+	border-radius: 5px;
+	border:none;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+	font-size: 14px;
+	font-weight: 700;
+	cursor:pointer;
+}
+
+.button-yes{
+ 
+    float:left;
+}
+
+.button-no{
+   
+   float:right;   
+}
+
+
+.deleteconfirm-modal-control
+{
+   height:50px;
+   margin: 40px 0 0px 0;
+   padding: 0 10px 0 10px;
+}
+
+
+

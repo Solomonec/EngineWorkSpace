@@ -1,10 +1,10 @@
-﻿html{
-   background:#fff url("img/Background.png") no-repeat center center fixed;/* указываем фоновое изображение(параметр url(bg.jpg)), которое будет растягиваться, центрируем его по горизонтале(параметр center) и вертикале(параметр center) и фиксируем его положение(параметр fixed)*/
--moz-background-size:cover; /* растягиваю изображение по размерам окна для браузера Firefox 3.6 */
--o-background-size:102% auto; /* растягиваю изображение по размерам окна для браузера Opera 9.5 */
--webkit-background-size:102% auto; /* растягиваю изображение по размерам окна для браузера Safari 3.0 */
--khtml-background-size:cover; /* растягиваю изображение по размерам окна для браузера Konqueror 3.5.4 */
-background-size:cover; /* растягиваю изображение по размерам окна для всех браузеров поддерживающих технологию CSS3 */
+﻿html {
+    background: #fff url("img/Background.png") no-repeat center center fixed;
+    -moz-background-size: cover;
+    -o-background-size: 102% auto;
+    -webkit-background-size: 102% auto;
+    -khtml-background-size: cover;
+    background-size: cover;
 }
 
 div{
@@ -110,7 +110,7 @@ border: 1px solid #363636;
     background-image: url("img/authbkgrd.png");
     border-radius: 10px;
     width: 445px;
-    height: 242px;
+    height: 241px;
     background-color: #000;
     border: 0px solid #000;
     -moz-border-radius: 10px;
@@ -140,7 +140,13 @@ input[type="checkbox"].input-validation-error {
 }
  
 .validation-summary-errors {
+    margin: 40px auto;
+    width: 445px;
+    background: url("img/errorsbg.png");
     color: #b94a48;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
 }
 
 .validation-summary-valid {

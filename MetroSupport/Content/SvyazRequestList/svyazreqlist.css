@@ -80,6 +80,7 @@ html{
 	background-color: #cfcfcf;
 	background-image: linear-gradient(to top, #4D3992 0%, #4D3992 0%, #4D3992 26%, #7166D7 84%, #7166D7 100%);
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.79);
+    min-width: 1450px;
 
 }
 
@@ -101,6 +102,7 @@ html{
 .main-request-menu-box {
 	
 	margin: 0 25px 20px 25px;
+    padding: 0 0 1px 0;
 	background-color: rgba(207, 207, 207, 0.7);
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.79);
     min-width: 1450px;
@@ -293,6 +295,6 @@ html{
 }
 
 .grid-row td {
-    padding: 0.8em 0.7em;
+    padding: 0.3em 0.7em;
    
 }

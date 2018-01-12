@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -362,6 +363,7 @@
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\ExportResultMode.cs" />
     <Compile Include="ViewModels\SearchResultModel.cs" />
+    <Compile Include="ViewModels\SearchResult_FilterViewModel.cs" />
     <Compile Include="ViewModels\SvyazRequest_LogViewModel.cs" />
     <Compile Include="ViewModels\TopCallRequest.cs" />
   </ItemGroup>
@@ -398,6 +400,8 @@
     <Content Include="Content\AsppRequestList\aspp.datetimepicker.css" />
     <Content Include="Content\AsppRequestList\aspp.jquery.modal.css" />
     <Content Include="Content\AsppRequestList\aspp.report.css" />
+    <Content Include="Content\AsppRequestList\aspp.deleteconfirm.css" />
+    <Content Include="Content\AsppRequestList\img\question.png" />
     <Content Include="Content\AsppRequest\img\arrow_select.png" />
     <Content Include="Content\AsppRequest\img\avatar.png" />
     <Content Include="Content\AsppRequest\img\checkbox_checked.png" />
@@ -429,6 +433,8 @@
     <Content Include="Content\ItGridTheme\bui\editico.png" />
     <Content Include="Content\ItGridTheme\bui\loading.gif" />
     <Content Include="Content\ItGridTheme\bui\pm.png" />
+    <Content Include="Content\ItRequestList\img\question.png" />
+    <Content Include="Content\ItRequestList\it.deleteconfirm.css" />
     <Content Include="Content\ItRequestList\img\arrow_it.png" />
     <Content Include="Content\ItRequestList\img\avatar.png" />
     <Content Include="Content\ItRequestList\it.report.css" />
@@ -452,9 +458,12 @@
     <Content Include="Content\ItRequest\Modals\it.holdon.css" />
     <Content Include="Content\ItRequest\Modals\it.theme.css" />
     <Content Include="Content\jquery.modal.css" />
+    <Content Include="Content\Login\img\errorsbg.png" />
     <Content Include="Content\Main\img\arrow.png" />
     <Content Include="Content\Main\img\avatar.png" />
+    <Content Include="Content\Main\img\findrequest.png" />
     <Content Include="Content\Main\img\new.png" />
+    <Content Include="Content\Main\img\norequest.png" />
     <Content Include="Content\PaGridTheme\bui\awem.css" />
     <Content Include="Content\PaGridTheme\bui\AwesomeMvc.css" />
     <Content Include="Content\PaGridTheme\bui\awe_icons.png" />
@@ -468,6 +477,7 @@
     <Content Include="Content\PaRequestList\pa.datetimepicker.css" />
     <Content Include="Content\PaRequestList\pa.jquery.modal.css" />
     <Content Include="Content\PaRequestList\pa.report.css" />
+    <Content Include="Content\PaRequestList\pa.deleteconfirm.css" />
     <Content Include="Content\PaRequest\img\avatar.png" />
     <Content Include="Content\PaRequest\img\arrow_select.png" />
     <Content Include="Content\PaRequest\img\head.png" />
@@ -494,6 +504,8 @@
     <Content Include="Content\SvyazGridTheme\bui\editico.png" />
     <Content Include="Content\SvyazGridTheme\bui\loading.gif" />
     <Content Include="Content\SvyazGridTheme\bui\pm.png" />
+    <Content Include="Content\SvyazRequestList\img\question.png" />
+    <Content Include="Content\SvyazRequestList\svyaz.deleteconfirm.css" />
     <Content Include="Content\SvyazRequestList\img\arrow_svyaz.png" />
     <Content Include="Content\SvyazRequestList\img\avatar.png" />
     <Content Include="Content\SvyazRequestList\svyaz.advancesearch.css" />
@@ -1715,6 +1727,7 @@
     <Content Include="Views\Shared\CallRequestMenu\AsppCallRequestMenuPartial.cshtml" />
     <Content Include="Views\Shared\CallRequestMenu\PaCallRequestMenuPartial.cshtml" />
     <Content Include="Views\Shared\CallRequestMenu\SvyazCallRequestMenuPartial.cshtml" />
+    <Content Include="Views\Shared\Modals\ConfirmationDeleteModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -79,6 +79,7 @@ html{
 	background-color: #cfcfcf;
 	background-image: linear-gradient(to top, #C88B16 0%, #C88B16  0%, #C88B16 26%, #E3BA57 84%, #E3BA57 100%);
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.79);
+    min-width: 1450px;
 }
 
 /* Лого */
@@ -185,6 +186,7 @@ html{
 
 .main-requests-info-box {
 	margin: 0 25px 25px 25px;
+    padding: 0 0 1px 0;
 	background-color: #D9D9D9;
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.79);
 	min-width: 1450px;
@@ -291,6 +293,6 @@ html{
 }
 
 .grid-row td {
-    padding: 0.8em 0.7em;
+    padding: 0.3em 0.7em;
    
 }

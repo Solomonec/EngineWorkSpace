@@ -202,20 +202,24 @@ namespace MetroSupport
             bundles.Add(new StyleBundle("~/Content/ItRequestList").Include("~/Content/ItRequestList/itreqlist.css",
                                                                            "~/Content/ItRequestList/it.datetimepicker.css",
                                                                            "~/Content/ItRequestList/it.advancesearch.css",
+                                                                           "~/Content/ItRequestList/it.deleteconfirm.css",
                                                                            "~/Content/ItRequestList/it.report.css",
                                                                            "~/Content/ItRequestList/it.jquery.modal.css"));
             bundles.Add(new StyleBundle("~/Content/PaRequestList").Include("~/Content/PaRequestList/pareqlist.css",
                                                                            "~/Content/PaRequestList/pa.datetimepicker.css",
                                                                            "~/Content/PaRequestList/pa.advancesearch.css",
+                                                                           "~/Content/PaRequestList/pa.deleteconfirm.css",
                                                                            "~/Content/PaRequestList/pa.report.css",
                                                                            "~/Content/PaRequestList/pa.jquery.modal.css"));
             bundles.Add(new StyleBundle("~/Content/AsppRequestList").Include("~/Content/AsppRequestList/asppreqlist.css",
                                                                             "~/Content/AsppRequestList/aspp.datetimepicker.css",
+                                                                            "~/Content/AsppRequestList/aspp.deleteconfirm.css",
                                                                            "~/Content/AsppRequestList/aspp.advancesearch.css",
                                                                            "~/Content/AsppRequestList/aspp.report.css",
                                                                            "~/Content/AsppRequestList/aspp.jquery.modal.css"));
             bundles.Add(new StyleBundle("~/Content/SvyazRequestList").Include("~/Content/SvyazRequestList/svyazreqlist.css",
                                                                               "~/Content/SvyazRequestList/svyaz.datetimepicker.css",
+                                                                              "~/Content/SvyazRequestList/svyaz.deleteconfirm.css",
                                                                               "~/Content/SvyazRequestList/svyaz.advancesearch.css",
                                                                               "~/Content/SvyazRequestList/svyaz.report.css",
                                                                               "~/Content/SvyazRequestList/svyaz.jquery.modal.css"));
@@ -223,6 +227,7 @@ namespace MetroSupport
                                                                             "~/Content/CentralRequestList/datetimepicker.css",
                                                                             "~/Content/CentralRequestList/jquery.modal.css"));
             bundles.Add(new StyleBundle("~/Content/ItServices").Include("~/Content/ItRequestList/it.advancesearch.css",
+                                                                            "~/Content/ItRequestList/it.deleteconfirm.css",
                                                                           "~/Content/ItRequestList/it.report.css"));
             bundles.Add(new StyleBundle("~/Content/AsppServices").Include("~/Content/AsppRequestList/aspp.advancesearch.css",
                                                                            "~/Content/AsppRequestList/aspp.report.css"));

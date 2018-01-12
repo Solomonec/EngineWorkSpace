@@ -57,11 +57,11 @@ namespace MetroSupport.Models
 
     public class LoginModel
     {
-        [Required(ErrorMessage = "*")]
+        [Required(ErrorMessage = "Введите имя пользователя")]
         [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "*")]
+        [Required(ErrorMessage = "Введите пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

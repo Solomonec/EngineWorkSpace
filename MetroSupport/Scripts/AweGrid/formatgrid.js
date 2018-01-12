@@ -1,9 +1,11 @@
 ﻿function formatComment(callrequests, prop) {
     var comment = callrequests[prop];
-    if (comment !== null)
-        return comment.substring(0, 40) + "...";
-    else {
-        return comment;
+    if (comment != null) {
+        if (comment.length > 40) {
+            return comment.substring(0, 40) + "...";
+        } else {
+            return comment;
+        }
     }
 };
 

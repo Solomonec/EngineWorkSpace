@@ -25,7 +25,7 @@
         <ul style="margin: 0; padding: 0; list-style-image: none;">
             @if (Model.AsppRequest.Status == 0)
             {
-                if (User.IsInRole("AsppBoss") || User.IsInRole("CallCenter"))
+                if (User.IsInRole("AsppBoss") || User.IsInRole("CallCenter") || User.IsInRole("Administrator"))
                 {
                     <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="saverequest()">Назначить и уведомить</a></li>
                 }
@@ -39,16 +39,16 @@
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                     }
                 }
-                if (User.IsInRole("CallCenter"))
+                if (User.IsInRole("CallCenter") || User.IsInRole("Administrator"))
                 {
                     <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                 }
             }
             @if (Model.AsppRequest.Status == 5 & Model.AsppRequest.IsWorkingOn == 0)
             {
-                if (User.IsInRole("AsppWork"))
+                if (User.IsInRole("AsppWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-smsize" })</li>
                     }
@@ -56,9 +56,9 @@
             }
             @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("AsppWork"))
+                if (User.IsInRole("AsppWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
                     }
@@ -66,9 +66,9 @@
             }
             @if (Model.AsppRequest.Status == 9)
             {
-                if (User.IsInRole("AsppBoss"))
+                if (User.IsInRole("AsppBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.AsppRequest.AssignBoss)
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
                     }
@@ -76,9 +76,9 @@
             }
             @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("AsppWork"))
+                if (User.IsInRole("AsppWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.AsppRequest.AssignTo)
+                    if (Model.User.FullName == Model.AsppRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-lgsize" })</li>
                     }
@@ -86,9 +86,9 @@
             }
             @if (Model.AsppRequest.Status == 9)
             {
-                if (User.IsInRole("AsppBoss"))
+                if (User.IsInRole("AsppBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.AsppRequest.AssignBoss)
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "AsppCallRequest", new { @requestid = Model.AsppRequest.CallRequestId }, new { @class = "button-control-smsize" })</li>
                     }
@@ -96,9 +96,9 @@
             }
             @if ((Model.AsppRequest.Status == 5 || Model.AsppRequest.Status == 4) & Model.AsppRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("AsppBoss") || User.IsInRole("AsppWork"))
-                {
-                    if (Model.User.FullName == Model.AsppRequest.AssignBoss || Model.User.FullName == Model.AsppRequest.AssignTo)
+                if (User.IsInRole("AsppBoss") || User.IsInRole("AsppWork") || User.IsInRole("Administrator"))
+                { 
+                    if (Model.User.FullName == Model.AsppRequest.AssignBoss || Model.User.FullName == Model.AsppRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="opendenyrequest()">Отклонить</a></li>
                     }
@@ -384,11 +384,11 @@
                     <div class="request-work-sm-context">
                         <div class="request-work-context-container">
                             <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.AsppRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.AsppRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.AsppRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.AsppRequest.StartTimeInWork), id = "starttimepicker" })
-                            <input type="button" class="request-work-context-button" value="..." />
+                            <input type="button" id="startdatetimenow" class="request-work-context-button" value="..." />
                         </div>
                         <div class="request-work-context-container">
                             <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.AsppRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.AsppRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.AsppRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.AsppRequest.EndTimeInWork), id = "endtimepicker" })
-                            <input type="button" class="request-work-context-button" value="..." />
+                            <input type="button" id="enddatetimenow" class="request-work-context-button" value="..." />
                         </div>
                         <div class="request-work-context-container">
                         </div>

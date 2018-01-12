@@ -38,7 +38,10 @@
         <div class="main-request-menu-delimiter"></div>
     </div>
     <div class="main-requests-info-box">
-        <button id="newrequest" class="button-control-style">Новая заявка</button>
+        @if (User.IsInRole("Administrator") || User.IsInRole("AsppBoss"))
+        {
+            <button id="newrequest" class="button-control-style">Новая заявка</button>
+        }
 @if (User.IsInRole("Administrator"))
 {
     <button id="deleterequest" class="button-control-style">Удалить</button>

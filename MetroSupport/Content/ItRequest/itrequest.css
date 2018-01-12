@@ -729,7 +729,6 @@ input[type="checkbox"]:checked + input[type="hidden"] + label{
 	box-shadow: inset 2.3px 4.5px 24px rgba(0, 0, 0, 0.5);
 }
 
-
 .field-validation-error {
     color: #b94a48;
 }

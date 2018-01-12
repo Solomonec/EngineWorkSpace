@@ -316,14 +316,18 @@ namespace MetroSupport.Controllers.CallRequestList
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-         
-            IQueryable<SearchResultModel> callrequests = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.It, filtermodel).Take(100);
-            List<SearchResultModel> search = callrequests.ToList();
-            if (callrequests == null)
+            SearchResult_FilterViewModel FilterResultModel = new SearchResult_FilterViewModel
+            {
+                Filter = new FilterViewModel(),
+                SearchResult = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.It, filtermodel).Take(200)
+            };
+
+            if (FilterResultModel.SearchResult == null)
             {
                 return HttpNotFound();
             }
-            return View("IT/AdvanceSearch", callrequests);
+            return View("IT/AdvanceSearch", FilterResultModel);
+           
         }
 
 
@@ -642,14 +646,18 @@ namespace MetroSupport.Controllers.CallRequestList
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-          
-            IQueryable<SearchResultModel> callrequests = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Aspp, filtermodel).Take(100);
-           
-            if (callrequests == null)
+
+            SearchResult_FilterViewModel FilterResultModel = new SearchResult_FilterViewModel
+            {
+                Filter = new FilterViewModel(),
+                SearchResult = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Aspp, filtermodel).Take(200)
+            };
+
+            if (FilterResultModel.SearchResult == null)
             {
                 return HttpNotFound();
             }
-            return View("IT/AdvanceSearch", callrequests);
+            return View("Aspp/AdvanceSearch", FilterResultModel);
         }
 
 
@@ -714,7 +722,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
 
@@ -797,7 +805,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
 
@@ -901,7 +909,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build());
         }
@@ -956,7 +964,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
 
@@ -970,14 +978,18 @@ namespace MetroSupport.Controllers.CallRequestList
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-           
-            IQueryable<SearchResultModel> callrequests = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Svyaz, filtermodel).Take(100);
-            List<SearchResultModel> search = callrequests.ToList();
-            if (callrequests == null)
+
+            SearchResult_FilterViewModel FilterResultModel = new SearchResult_FilterViewModel
+            {
+                Filter = new FilterViewModel(),
+                SearchResult = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Aspp, filtermodel).Take(200)
+            };
+
+            if (FilterResultModel.SearchResult == null)
             {
                 return HttpNotFound();
             }
-            return View("Svyaz/AdvanceSearch", callrequests);
+            return View("Svyaz/AdvanceSearch", FilterResultModel);
         }
 
 
@@ -1040,7 +1052,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
 
@@ -1123,7 +1135,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
 
@@ -1227,7 +1239,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build());
         }
@@ -1296,14 +1308,18 @@ namespace MetroSupport.Controllers.CallRequestList
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-         
-            IQueryable<SearchResultModel> callrequests = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Pa, filtermodel).Take(100);
-            List<SearchResultModel> search = callrequests.ToList();
-            if (callrequests == null)
+
+            SearchResult_FilterViewModel FilterResultModel = new SearchResult_FilterViewModel
+            {
+                Filter = new FilterViewModel(),
+                SearchResult = _metroSupport.MetroSearch.AdvaceSearch(SearchEntry.Pa, filtermodel).Take(200)
+            };
+
+            if (FilterResultModel.SearchResult == null)
             {
                 return HttpNotFound();
             }
-            return View("Pa/AdvanceSearch", callrequests);
+            return View("Pa/AdvanceSearch", FilterResultModel);
         }
 
 
@@ -1387,7 +1403,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
         }
@@ -1423,7 +1439,7 @@ namespace MetroSupport.Controllers.CallRequestList
                     o.AssignTo,
                     o.Category,
                     o.TroubleSubject,
-                    o.Comment,
+                    o.Comment
                 }
             }.Build();
         }
@@ -1459,7 +1475,7 @@ namespace MetroSupport.Controllers.CallRequestList
                  o.AssignTo,
                  o.Category,
                  o.TroubleSubject,
-                 o.Comment,
+                 o.Comment
              }
          }.Build();
      }
@@ -1495,7 +1511,7 @@ namespace MetroSupport.Controllers.CallRequestList
                  o.AssignTo,
                  o.Category,
                  o.TroubleSubject,
-                 o.Comment,
+                 o.Comment
              }
          }.Build();
      }

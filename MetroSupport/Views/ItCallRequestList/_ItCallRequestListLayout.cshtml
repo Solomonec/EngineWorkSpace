@@ -40,12 +40,16 @@
         <div class="main-request-menu-delimiter"></div>
     </div>
 <div class="main-requests-info-box">
-    <button id="newrequest" class="button-control-style">Новая заявка</button>
-@if (User.IsInRole("Administrator"))
+@if (User.IsInRole("Administrator") || User.IsInRole("ItBoss"))
 {
-    <button id="deleterequest" class="button-control-style">Удалить</button>
+    <button id="newrequest" class="button-control-style">Новая заявка</button>
 }
-       <button id="report" class="button-control-style">Отчет</button>
+    @if (User.IsInRole("Administrator"))
+    {
+        
+        <button id="deleterequest" class="button-control-style">Удалить</button>
+    }
+    <button id="report" class="button-control-style">Отчет</button>
     @using (Html.BeginForm("SimpleSearch", "ItCallRequestList", FormMethod.Post, new {id = "simplesearchform", style = "float: right; display: block"}))
     {
         <button id="bthsearch" type="submit" class="button-search">Найти</button>
@@ -55,6 +59,7 @@
     <div style="clear: both"></div>
     <div style="margin: 20px 10px 10px 10px;">
         @RenderBody()
+      
     </div>
 </div>
    

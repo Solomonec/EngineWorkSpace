@@ -39,16 +39,16 @@
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                     }
                 }
-                if (User.IsInRole("CallCenter"))
+                if (User.IsInRole("CallCenter") || User.IsInRole("Administrator"))
                 {
                     <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="saverequest()">Сохранить</a></li>
                 }
             }
             @if (Model.SvyazRequest.Status == 5 & Model.SvyazRequest.IsWorkingOn == 0)
             {
-                if (User.IsInRole("SvyazWork"))
+                if (User.IsInRole("SvyazWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Принять в работу", "Accept", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
                     }
@@ -56,9 +56,9 @@
             }
             @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("SvyazWork"))
+                if (User.IsInRole("SvyazWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openholdon()">Продлить заяку</a></li>
                     }
@@ -66,9 +66,9 @@
             }
             @if (Model.SvyazRequest.Status == 9)
             {
-                if (User.IsInRole("SvyazBoss"))
+                if (User.IsInRole("SvyazBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-mdsize" ng-click="openreturntoassigner()">Вернуть исполнителю</a></li>
                     }
@@ -76,9 +76,9 @@
             }
             @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("SvyazWork"))
+                if (User.IsInRole("SvyazWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Отправить на подтверждение", "SendForAprove", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-lgsize"})</li>
                     }
@@ -86,9 +86,9 @@
             }
             @if (Model.SvyazRequest.Status == 9)
             {
-                if (User.IsInRole("SvyazBoss"))
+                if (User.IsInRole("SvyazBoss") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel">@Html.ActionLink("Закрыть заявку", "CloseRequest", "SvyazCallRequest", new {@requestid = Model.SvyazRequest.CallRequestId}, new {@class = "button-control-smsize"})</li>
                     }
@@ -96,9 +96,9 @@
             }
             @if ((Model.SvyazRequest.Status == 5 || Model.SvyazRequest.Status == 4) & Model.SvyazRequest.IsWorkingOn == 1)
             {
-                if (User.IsInRole("SvyazBoss") || User.IsInRole("SvyazWork"))
+                if (User.IsInRole("SvyazBoss") || User.IsInRole("SvyazWork") || User.IsInRole("Administrator"))
                 {
-                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo)
+                    if (Model.User.FullName == Model.SvyazRequest.AssignBoss || Model.User.FullName == Model.SvyazRequest.AssignTo || User.IsInRole("Administrator"))
                     {
                         <li class="button-control-panel"><a href="#" class="button-control-smsize" ng-click="openredenyrequest()">Отклонить</a></li>
                     }
@@ -319,11 +319,11 @@
                     <div class="request-work-sm-context">
                         <div class="request-work-context-container">
                             <div class="request-work-context-name">Начало работы</div> @Html.TextBoxFor(x => x.SvyazRequest.StartDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.SvyazRequest.StartDateInWork), id = "startdatepicker" }) @Html.TextBoxFor(x => x.SvyazRequest.StartTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.SvyazRequest.StartTimeInWork), id = "starttimepicker" })
-                            <input type="button" class="request-work-context-button" value="..." />
+                            <input type="button" id="startdatetimenow" class="request-work-context-button" value="..." />
                         </div>
                         <div class="request-work-context-container">
                             <div class="request-work-context-name">Конец работы</div> @Html.TextBoxFor(x => x.SvyazRequest.EndDateInWork, "{0:dd.mm.yyyy}", new { @class = "request-work-context-time", @Value = Dates.DateNullConversion(Model.SvyazRequest.EndDateInWork), id = "enddatepicker" }) @Html.TextBoxFor(x => x.SvyazRequest.EndTimeInWork, new { @class = "request-work-context-time", @Value = Dates.TimeNullConversion(Model.SvyazRequest.EndTimeInWork), id = "endtimepicker" })
-                            <input type="button" class="request-work-context-button" value="..." />
+                            <input type="button" id="enddatetimenow" class="request-work-context-button" value="..." />
                         </div>
                         <div class="request-work-context-container">
                         </div>

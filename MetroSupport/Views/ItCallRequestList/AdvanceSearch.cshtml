@@ -1,6 +1,7 @@
 ﻿
-@model IQueryable<MetroSupport.ViewModels.SearchResultModel>
+@model MetroSupport.ViewModels.SearchResult_FilterViewModel
 @using MetroSupport.Commons
+@using MetroSupport.ViewModels
 @using Omu.Awem
 @{
     Layout = "~/Views/ItCallRequestList/_ItCallRequestListLayout.cshtml";
@@ -11,94 +12,96 @@
 <div>
     <table class="grid-style">
         <thead class="grid-header">
-            <tr class="grid-row">
-                <td width="50px"></td>
-                <td width="100px">Дата</td>
-                <td width="100px">Время</td>
-                <td width="100px">№ заявки</td>
-                <td>Статус</td>
-                <td>Заявитель</td>
-                <td>Ответственный</td>
-                <td>Исполнитель</td>
-                <td>Категория</td>
-                <td>Тема заявки</td>
-                <td>Комментарий</td>
-                <td></td>
-            </tr>
+        <tr class="grid-row">
+            <td width="50px"></td>
+            <td width="100px">Дата</td>
+            <td width="100px">Время</td>
+            <td width="100px">№ заявки</td>
+            <td>Статус</td>
+            <td>Заявитель</td>
+            <td>Ответственный</td>
+            <td>Исполнитель</td>
+            <td>Категория</td>
+            <td>Тема заявки</td>
+            <td>Комментарий</td>
+            <td></td>
+        </tr>
         </thead>
         <tbody class="grid-row">
-            @if (Model != null)
+        @if (Model != null)
+        {
+            foreach (var callrequest in Model.SearchResult)
             {
-                foreach (var callrequest in Model)
-                {
-                    <tr>
-                        <td width="50px"><input type='checkbox' name='CallRequestId' value='@callrequest.CallRequestId' /></td>
-                        <td width="100px">@callrequest.Creation.Value.ToShortDateString()</td>
-                        <td width="100px">@callrequest.Time.Value.ToShortTimeString()</td>
-                        <td width="100px">@callrequest.RequestNumber</td>
-                        <td>@Html.Raw(callrequest.Status.ToHtmlStatusGridStr())</td>
-                        <td>@callrequest.RequestorName</td>
-                        <td>@callrequest.AssignBoss</td>
-                        <td>@callrequest.AssignTo</td>
-                        <td>@callrequest.Category</td>
-                        <td>@callrequest.TroubleSubject</td>
-                        @{
-                    if (callrequest.Comment.Length > 40)
-                    {
-                        <td>
-                            @callrequest.Comment.Substring(0, 40)...
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @callrequest.Comment
-                        </td>
-                    }
+                <tr>
+                    <td width="50px"><input type='checkbox' name='CallRequestId' value='@callrequest.CallRequestId' /></td>
+                    <td width="100px">@callrequest.Creation.Value.ToShortDateString()</td>
+                    <td width="100px">@callrequest.Time.Value.ToShortTimeString()</td>
+                    <td width="100px">@callrequest.RequestNumber</td>
+                    <td>@Html.Raw(callrequest.Status.ToHtmlStatusGridStr())</td>
+                    <td>@callrequest.RequestorName</td>
+                    <td>@callrequest.AssignBoss</td>
+                    <td>@callrequest.AssignTo</td>
+                    <td>@callrequest.Category</td>
+                    <td>@callrequest.TroubleSubject</td>
+                    @{
+                        if (callrequest.Comment.Length > 40)
+                        {
+                            <td>
+                                @callrequest.Comment.Substring(0, 40)...
+                            </td>
                         }
-                        <td width="80px"><a href="/AsppCallRequest/Index?Id=@callrequest.CallRequestId" class="awe-btn-link" target="_blank"><span class="editicon"></span></a></td>
+                        else
+                        {
+                            <td>
+                                @callrequest.Comment
+                            </td>
+                        }
+                    }
+                    <td width="80px"><a href="/ItCallRequest/Index?Id=@callrequest.CallRequestId" class="awe-btn-link" target="_blank"><span class="editicon"></span></a></td>
 
                         
-                    </tr>
-
-
-                }
-
-            }
-            else
-            {
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
                 </tr>
 
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+
             }
+
+        }
+        else
+        {
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
         </tbody>
     </table>
 
 </div>
+@Html.Partial("Modals/ItAdvanceSearchModalPartial",Model.Filter)
+@Html.Partial("Modals/ItReportModalPartial", Model.Filter)
 

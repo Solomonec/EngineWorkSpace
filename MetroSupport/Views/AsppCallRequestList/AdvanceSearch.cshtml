@@ -1,5 +1,5 @@
 ﻿
-@model IQueryable<MetroSupport.ViewModels.SearchResultModel>
+@model MetroSupport.ViewModels.SearchResult_FilterViewModel
 @using MetroSupport.Commons
 @using Omu.Awem
 @{
@@ -29,7 +29,7 @@
         <tbody class="grid-row">
             @if (Model != null)
             {
-                foreach (var callrequest in Model)
+                foreach (var callrequest in Model.SearchResult)
                 {
                     <tr>
                         <td width="50px"><input type='checkbox' name='CallRequestId' value='@callrequest.CallRequestId' /></td>
@@ -101,3 +101,5 @@
 
 </div>
 
+@Html.Partial("Modals/AsppAdvanceSearchModalPartial", Model.Filter)
+@Html.Partial("Modals/AsppReportModalPartial", Model.Filter)

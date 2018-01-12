@@ -94,8 +94,19 @@
                     <span class="main-menu-head-icons toprequest-ico"></span>
                     <div class="main-menu-header-text">Топ новых заявок</div>
                 </div>
-                <div id="requestscontainer">
+                
+                <div class="findnewrequests" ng-if="checknewrequests">
+                    <div class="findnewrequests-status"></div>
+                    <div class="findnewrequests-text">Проверка наличия новых заявок...</div>
+                </div>
+                <div class="nonewrequests" ng-if="isnonewrequests">
+                    <div class="nonewrequests-status"></div>
+                    <div class="nonewrequests-text">Новые заявки отсутствуют!</div>
 
+                </div>
+
+                <div id="requestscontainer" ng-show ="showrequests">
+                    
 
                 </div>
 

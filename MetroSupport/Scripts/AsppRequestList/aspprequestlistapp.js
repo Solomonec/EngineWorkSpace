@@ -70,32 +70,10 @@ function initializeControlButtons() {
     $("#deleterequest").click(function () {
 
 
-        var checkGridSelection = "";
-        var selected = $("#AsppCallRequestsGrid [name=id]:checked").map(function () {
-            checkGridSelection = "Selected";
-            return $(this).val();
-        }).get();
-
-        if (checkGridSelection === "Selected") {
-            var r = confirm("Выбранные вами заявки будут удалены. Удалить заявки?");
-            if (r === true) {
-                var selectedIds = selected.join(';');
-                var ref = document.location;
-                $.ajax({
-                    type: 'Post',
-                    cache: false,
-                    url: '/AsppCallRequestList/DeleteCallRequests/',
-                    data: { selectedIds: selectedIds },
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data === true)
-                            document.location = ref;
-                        else
-                            alert("Произошла ошибка во время удаления заявок");
-                    }
-                });
-            }
-        }
+        var deleteRequests = new DeleteRequests();
+        deleteRequests.DeleteConfirmation();
+        deleteRequests.InitYes();
+        deleteRequests.InitNo();
 
     });
 
@@ -170,4 +148,60 @@ function initializeAutocompliters() {
 
         });
     }
+}
+
+
+
+function DeleteRequests() {
+
+    var checkGridSelection = "";
+
+    function getCheckRequests() {
+
+        return $("input[type=checkbox]:checked").map(function () {
+            checkGridSelection = "Selected";
+            return $(this).val();
+        }).get();
+
+    }
+
+    this.DeleteConfirmation = function () {
+        getCheckRequests();
+        if (checkGridSelection === "Selected") $("#modaldeleteconfirm").modal();
+    };
+
+    this.InitYes = function () {
+        $(".button-yes").click(function () {
+
+            var selected = getCheckRequests();
+
+            if (checkGridSelection === "Selected") {
+
+                var selectedIds = selected.join(';');
+                var ref = document.location;
+                $.ajax({
+                    type: 'Post',
+                    cache: false,
+                    url: '/AsppCallRequestList/DeleteCallRequests/',
+                    data: { selectedIds: selectedIds },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data === true)
+                            document.location = ref;
+                        else
+                            $.modal.close();
+                        alert("Произошла ошибка во время удаления заявок");
+                    }
+                });
+            }
+        });
+    }
+
+    this.InitNo = function () {
+        $(".button-no").click(
+            function () {
+                $.modal.close();
+            });
+    }
+
 }
